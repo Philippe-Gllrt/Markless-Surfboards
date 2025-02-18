@@ -16,11 +16,12 @@ window.addEventListener("load", () => {
   setProcessLottie();
   sectBarCodeMovement();
   setTimeout(setProcessFadingText, 1000);
+  setTimeout(setParallax, 1000);
 });
 
 const lenis = new Lenis({
   // Value between 0 and 1, smaller more fluid
-  lerp: 0.1,
+  lerp: 0.05,
   wheelMultiplier: 1,
 });
 
@@ -163,16 +164,16 @@ function EntranceAnimation() {
     "<"
   );
 
-  landingEntranceTl.to(
-    ".hero_background",
-    {
-      //scale the sun
-      scale: 1.5, //dynamicallly compute the needed scale
-      duration: 1.4,
-      ease: "power2.out",
-    },
-    "<"
-  );
+  // landingEntranceTl.to(
+  //   ".hero_backgroundvideo",
+  //   {
+  //     //scale the sun
+  //     scale: 1.5,
+  //     duration: 1.4,
+  //     ease: "power2.out",
+  //   },
+  //   "<"
+  // );
 
   landingEntranceTl.from(
     ".cookie_container",
@@ -268,19 +269,27 @@ function updateClock() {
 
 function setNavBarMenu() {
   gsap.set(".nav_blurbackdrop", { opacity: 0, display: "none" });
-  gsap.set(".nav_menu-container", { display: "none" })
+  gsap.set(".nav_menu-container", { display: "none" });
   let isOpen = false;
 
   //Seting the timeline animation
-  const navOpenTl = gsap.timeline({paused: true});
-  navOpenTl.set(".nav_menu-container", { display: "block" })
-  navOpenTl.from(".nav_menu", { yPercent: -120, duration: 0.5, ease: "power3.inOut" });
-  navOpenTl.to(".nav_blurbackdrop", {
-    opacity: 1,
-    display: "block",
-    ease: "power2.inOut",
+  const navOpenTl = gsap.timeline({ paused: true });
+  navOpenTl.set(".nav_menu-container", { display: "block" });
+  navOpenTl.from(".nav_menu", {
+    yPercent: -120,
     duration: 0.5,
-  }, "<");
+    ease: "power3.inOut",
+  });
+  navOpenTl.to(
+    ".nav_blurbackdrop",
+    {
+      opacity: 1,
+      display: "block",
+      ease: "power2.inOut",
+      duration: 0.5,
+    },
+    "<"
+  );
   let delay = 0.5;
 
   $(".nav_menu .horizontal-line").each(function (index, element) {
@@ -290,7 +299,7 @@ function setNavBarMenu() {
         scaleX: 0,
         transformOrigin: `${gsap.utils.random(["0", "100"])}% 0%`,
         duration: 0.4,
-         ease: "power2.inOut",
+        ease: "power2.inOut",
         delay: delay,
       },
       "<"
@@ -314,65 +323,95 @@ function setNavBarMenu() {
     delay = Math.random() * (0.1 - 0.01) + 0.01;
   });
 
-  navOpenTl.from("[barcode-up] .barcode_track", {
-    ease: "power2.inOut",
-    duration: 0.5,
-    yPercent: -120,
-  }, "<");
+  navOpenTl.from(
+    "[barcode-up] .barcode_track",
+    {
+      ease: "power2.inOut",
+      duration: 0.5,
+      yPercent: -120,
+    },
+    "<"
+  );
 
-  navOpenTl.from("[barcode-down] .barcode_track", {
-    ease: "power2.inOut",
-    duration: 0.5,
-    yPercent: 120,
-  }, "<")
+  navOpenTl.from(
+    "[barcode-down] .barcode_track",
+    {
+      ease: "power2.inOut",
+      duration: 0.5,
+      yPercent: 120,
+    },
+    "<"
+  );
 
   //Select text, wrapp then in span, to animate the span later. giving overflow hidden to p elements
-  $("[barcode-up] p, [barcode-down] p").each(function() {
+  $("[barcode-up] p, [barcode-down] p").each(function () {
     let $this = $(this);
     let text = $this.text();
-    $this.empty().append(
-            $("<span class='text-content' style='display: inline-block;'></span>").text(text)
-    );
+    $this
+      .empty()
+      .append(
+        $(
+          "<span class='text-content' style='display: inline-block;'></span>"
+        ).text(text)
+      );
     $this.css("overflow", "hidden");
   });
 
-  navOpenTl.from(".nav_menu_animated-ico", {
-    ease: "power2.inOut",
-    duration: 0.5,
-    opacity: 0,
-  }, "<");
-  
+  navOpenTl.from(
+    ".nav_menu_animated-ico",
+    {
+      ease: "power2.inOut",
+      duration: 0.5,
+      opacity: 0,
+    },
+    "<"
+  );
 
-  navOpenTl.from("[barcode-up] .nav_menu_link-sub .text-content, [barcode-down] .nav_menu_link-main .text-content", {
-    ease: "power2.inOut",
-    duration: 0.5,
-    yPercent: 120,
-    delay: 0.1,
-  }, "<");
+  navOpenTl.from(
+    "[barcode-up] .nav_menu_link-sub .text-content, [barcode-down] .nav_menu_link-main .text-content",
+    {
+      ease: "power2.inOut",
+      duration: 0.5,
+      yPercent: 120,
+      delay: 0.1,
+    },
+    "<"
+  );
 
-  navOpenTl.from("[barcode-down] .nav_menu_link-sub .text-content, [barcode-up] .nav_menu_link-main .text-content", {
-    ease: "power2.inOut",
-    duration: 0.5,
-    yPercent: -120,
-    delay: 0.2,
-  }, "<")
+  navOpenTl.from(
+    "[barcode-down] .nav_menu_link-sub .text-content, [barcode-up] .nav_menu_link-main .text-content",
+    {
+      ease: "power2.inOut",
+      duration: 0.5,
+      yPercent: -120,
+      delay: 0.2,
+    },
+    "<"
+  );
 
-  navOpenTl.from(".nav_menu_close_text .char", {
-    ease: "power2.inOut",
-    duration: 0.5,
-    yPercent: -120,
-  }, "<")
+  navOpenTl.from(
+    ".nav_menu_close_text .char",
+    {
+      ease: "power2.inOut",
+      duration: 0.5,
+      yPercent: -120,
+    },
+    "<"
+  );
 
-  navOpenTl.from(".nav_menu_close_button .char", {
-    ease: "power2.inOut",
-    duration: 0.5,
-    yPercent: 120,
-  }, "<")
-
+  navOpenTl.from(
+    ".nav_menu_close_button .char",
+    {
+      ease: "power2.inOut",
+      duration: 0.5,
+      yPercent: 120,
+    },
+    "<"
+  );
 
   $(".nav_button").click(function () {
     if (!isOpen) {
-      navOpenTl.play()
+      navOpenTl.play();
       isOpen = true;
     }
   });
@@ -443,18 +482,34 @@ function sectBarCodeMovement() {
 }
 
 function setProcessFadingText() {
-  $(".process_text-wrapper").each(function() {
+  $(".process_text-wrapper").each(function () {
     let tl = gsap.timeline({
-        scrollTrigger: {
-            trigger: $(this), // Utilisation de l'élément DOM pur pour ScrollTrigger
-            start: "top 65%",   // Animation commence à 75% de l'écran
-            end: "bottom 35%",     // Animation termine à 25% de l'écran
-            ease: "linear",
-            scrub: true,
-        }
+      scrollTrigger: {
+        trigger: $(this), // Utilisation de l'élément DOM pur pour ScrollTrigger
+        start: "top 65%", // Animation commence à 75% de l'écran
+        end: "bottom 35%", // Animation termine à 25% de l'écran
+        ease: "linear",
+        scrub: true,
+      },
     });
 
-    tl.from($(this), { opacity: 0.2, duration: 0.3 })  // Passe à 100%
-      .to($(this), { opacity: 0.2, duration: 0.3, delay: 0.1}); // Reprend 50%
-});
+    tl.from($(this), { opacity: 0.2, duration: 0.3 }) // Passe à 100%
+      .to($(this), { opacity: 0.2, duration: 0.3, delay: 0.1 }); // Reprend 50%
+  });
+}
+
+function setParallax() {
+  $("[parallax]").each(function () {
+    console.log($(this));
+    let parallaxTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: $(this),
+        start: "top bottom",
+        end: "bottom top",
+        ease: "linear",
+        scrub: true,
+      },
+    });
+    parallaxTl.from($(this), { yPercent: -16.66, duration: 1 });
+  });
 }
