@@ -19,6 +19,7 @@ window.addEventListener("load", () => {
   setTimeout(setProcessFadingText, 1000);
   setTimeout(setParallax, 1000);
   setTimeout(setBoardsScrollAnimation, 1000);
+  setButtonHover();
 });
 
 const lenis = new Lenis({
@@ -508,15 +509,18 @@ function setProcessFadingText() {
     let tl = gsap.timeline({
       scrollTrigger: {
         trigger: $(this),
-        start: "top 65%", 
+        start: "top 65%",
         end: "bottom 35%",
         ease: "linear",
         scrub: true,
       },
     });
 
-    tl.from($(this), { opacity: 0.2, duration: 0.3 })
-      .to($(this), { opacity: 0.2, duration: 0.3, delay: 0.1 });
+    tl.from($(this), { opacity: 0.2, duration: 0.3 }).to($(this), {
+      opacity: 0.2,
+      duration: 0.3,
+      delay: 0.1,
+    });
   });
 }
 
@@ -537,7 +541,7 @@ function setParallax() {
 
 function setBoardsScrollAnimation() {
   let images = $(".boards_background-picture").toArray();
-  images.shift(); 
+  images.shift();
 
   let maintl = gsap.timeline({
     scrollTrigger: {
@@ -600,13 +604,64 @@ function setBoardsScrollAnimation() {
     });
 
     if (boardCardsPoped[index]) {
-      boardTl.to(boardCardsPoped[index], {
-        duration: 1,
-        ease: "power1.out",
-        scale: 0.95,
-        filter: "blur(2px)",
-      }, "<");
+      boardTl.to(
+        boardCardsPoped[index],
+        {
+          duration: 1,
+          ease: "power1.out",
+          scale: 0.95,
+          filter: "blur(2px)",
+        },
+        "<"
+      );
     }
   }
 }
 
+function setButtonHover() {
+  $(".button").each(function () {
+    const $btn = $(this).find(".button_second-row");
+    const $svg = $btn.find("svg");
+    const $horizontal = $svg.find(".horizontal");
+    const $vertical = $svg.find(".vertical");
+    const $background = $btn.find(".button_background");
+
+    $btn.on("mousemove", function (e) {
+      const offset = $btn.offset();
+      const width = $btn.outerWidth();
+      const height = $btn.outerHeight();
+
+      const x = e.pageX - offset.left;
+      const y = e.pageY - offset.top;
+
+      gsap.to($horizontal, {
+        duration: 0.2,
+        attr: { y1: y, y2: y, x1: 0, x2: width },
+        ease: "power2.out",
+      });
+
+      gsap.to($vertical, {
+        duration: 0.2,
+        attr: { x1: x, x2: x, y1: 0, y2: height },
+        ease: "power2.out",
+      });
+    });
+
+    gsap.set([$horizontal, $vertical, $background], { opacity: 0 });
+
+    $btn.on("mouseleave", function () {
+      gsap.to([$horizontal, $vertical, $background], {
+        opacity: 0,
+        duration: 0.2,
+      });
+    });
+
+    $btn.on("mouseenter", function () {
+      gsap.to([$horizontal, $vertical, $background], {
+        opacity: 1,
+        duration: 0.2,
+      });
+    });
+
+  });
+}
