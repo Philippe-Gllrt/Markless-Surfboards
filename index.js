@@ -13,10 +13,12 @@ window.addEventListener("load", () => {
   EntranceAnimation();
   setNavBarMenu();
   setIntroLottie();
+  setFooterLottie();
   setProcessLottie();
   sectBarCodeMovement();
   setTimeout(setProcessFadingText, 1000);
   setTimeout(setParallax, 1000);
+  setTimeout(setBoardsScrollAnimation, 1000);
 });
 
 const lenis = new Lenis({
@@ -444,6 +446,26 @@ function setIntroLottie() {
   });
 }
 
+function setFooterLottie() {
+  let anim = lottie.loadAnimation({
+    container: document.querySelector(".footer_lottie"),
+    renderer: "svg",
+    loop: false, // or false if you don't want it to loop
+    autoplay: false, // Disable autoplay
+    path: "https://cdn.prod.website-files.com/67939e9483ef1b9e88e964c0/67a3abaf4e23619f5632ed13_markless---lottie-logo-animation.json",
+  });
+
+  ScrollTrigger.create({
+    trigger: $(".footer_lottie"),
+    start: "top 80%",
+    end: "bottom 20%",
+    onEnter: () => anim.play(),
+    // onLeaveBack: () => anim.stop(),
+    //toggleActions: "play none none reverse",
+    toggleActions: "play none none none",
+  });
+}
+
 function disableScroll() {
   $("body").css("overflow", "hidden"); // Désactive le scroll
 }
@@ -485,22 +507,21 @@ function setProcessFadingText() {
   $(".process_text-wrapper").each(function () {
     let tl = gsap.timeline({
       scrollTrigger: {
-        trigger: $(this), // Utilisation de l'élément DOM pur pour ScrollTrigger
-        start: "top 65%", // Animation commence à 75% de l'écran
-        end: "bottom 35%", // Animation termine à 25% de l'écran
+        trigger: $(this),
+        start: "top 65%", 
+        end: "bottom 35%",
         ease: "linear",
         scrub: true,
       },
     });
 
-    tl.from($(this), { opacity: 0.2, duration: 0.3 }) // Passe à 100%
-      .to($(this), { opacity: 0.2, duration: 0.3, delay: 0.1 }); // Reprend 50%
+    tl.from($(this), { opacity: 0.2, duration: 0.3 })
+      .to($(this), { opacity: 0.2, duration: 0.3, delay: 0.1 });
   });
 }
 
 function setParallax() {
   $("[parallax]").each(function () {
-    console.log($(this));
     let parallaxTl = gsap.timeline({
       scrollTrigger: {
         trigger: $(this),
@@ -513,3 +534,79 @@ function setParallax() {
     parallaxTl.from($(this), { yPercent: -16.66, duration: 1 });
   });
 }
+
+function setBoardsScrollAnimation() {
+  let images = $(".boards_background-picture").toArray();
+  images.shift(); 
+
+  let maintl = gsap.timeline({
+    scrollTrigger: {
+      trigger: ".section_boards",
+      start: "top top",
+      end: "bottom bottom",
+      scrub: true,
+      ease: "linear",
+      invalidateOnRefresh: true,
+    },
+  });
+
+  images.forEach((image) => {
+    let tl = gsap.timeline();
+
+    gsap.set(image, {
+      clipPath: "polygon(0 100%, 100% 100%, 100% 100%, 0 100%)",
+    });
+
+    tl.to(image, {
+      clipPath: "polygon(0 56%, 100% 44%, 100% 100%, 0% 100%)",
+      ease: "power1.in",
+      duration: 0.5,
+    });
+
+    tl.to(
+      image,
+      {
+        clipPath: "polygon(0 0%, 100% 0%, 100% 100%, 0 100%)",
+        ease: "power1.out",
+        duration: 0.5,
+      },
+      ">"
+    );
+
+    maintl.add(tl, ">");
+  });
+
+  let boardCards = $(".boards_card").toArray();
+  let boardCardsShifted = boardCards.slice(1);
+  let boardCardsPoped = boardCards.slice(0, -1);
+
+  let boardTl = gsap.timeline({
+    scrollTrigger: {
+      trigger: ".section_boards",
+      start: "top top",
+      end: "bottom bottom",
+      scrub: true,
+      ease: "linear",
+    },
+  });
+
+  for (let index = 0; index < boardCardsShifted.length; index++) {
+    console.log(boardCardsShifted[index]);
+    boardTl.from(boardCardsShifted[index], {
+      y: "100vh",
+      scale: 1.2,
+      ease: "power1.out",
+      duration: 1,
+    });
+
+    if (boardCardsPoped[index]) {
+      boardTl.to(boardCardsPoped[index], {
+        duration: 1,
+        ease: "power1.out",
+        scale: 0.95,
+        filter: "blur(2px)",
+      }, "<");
+    }
+  }
+}
+
