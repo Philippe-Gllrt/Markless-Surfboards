@@ -433,7 +433,7 @@ function setIntroLottie() {
     renderer: "svg",
     loop: false, // or false if you don't want it to loop
     autoplay: false, // Disable autoplay
-    path: "https://cdn.prod.website-files.com/67939e9483ef1b9e88e964c0/67a3abaf4e23619f5632ed13_markless---lottie-logo-animation.json",
+    path: "https://cdn.prod.website-files.com/67939e9483ef1b9e88e964c0/67a3abaf4e23619f5632ed13_002b56c657410d727d0cb416d58ea23f_markless---lottie-logo-animation.json",
   });
 
   ScrollTrigger.create({
@@ -453,7 +453,7 @@ function setFooterLottie() {
     renderer: "svg",
     loop: false, // or false if you don't want it to loop
     autoplay: false, // Disable autoplay
-    path: "https://cdn.prod.website-files.com/67939e9483ef1b9e88e964c0/67a3abaf4e23619f5632ed13_markless---lottie-logo-animation.json",
+    path: "https://cdn.prod.website-files.com/67939e9483ef1b9e88e964c0/67a3abaf4e23619f5632ed13_002b56c657410d727d0cb416d58ea23f_markless---lottie-logo-animation.json",
   });
 
   ScrollTrigger.create({
@@ -481,7 +481,7 @@ function setProcessLottie() {
     renderer: "svg",
     loop: false, // or false if you don't want it to loop
     autoplay: false, // Disable autoplay
-    path: "https://cdn.prod.website-files.com/67939e9483ef1b9e88e964c0/67a4d1c2bc2edae311b3c99f_d937c29ac586995a3cd6c34243c8601a_markless---schema.json",
+    path: "https://cdn.prod.website-files.com/67939e9483ef1b9e88e964c0/67a4d1c2bc2edae311b3c99f_be0111218b8d809cb2c82fdaaff50839_markless---schema.json",
   });
 
   ScrollTrigger.create({
@@ -535,7 +535,7 @@ function setParallax() {
         scrub: true,
       },
     });
-    parallaxTl.from($(this), { yPercent: -16.66, duration: 1 });
+    parallaxTl.from($(this), { yPercent: 16.66, duration: 1 });
   });
 }
 
@@ -595,7 +595,6 @@ function setBoardsScrollAnimation() {
   });
 
   for (let index = 0; index < boardCardsShifted.length; index++) {
-    console.log(boardCardsShifted[index]);
     boardTl.from(boardCardsShifted[index], {
       y: "100vh",
       scale: 1.2,
@@ -616,6 +615,44 @@ function setBoardsScrollAnimation() {
       );
     }
   }
+
+  let imageSeparators = $(".boards_background-picture-greysperator").toArray();
+  let separatortl = gsap.timeline({
+    scrollTrigger: {
+      trigger: ".section_boards",
+      start: "top top",
+      end: "bottom bottom",
+      scrub: true,
+      ease: "linear",
+    },
+  });
+
+  imageSeparators.forEach((separator) => {
+    let tl = gsap.timeline();
+    gsap.set(separator, {
+      clipPath: "polygon(0 100%, 100% 100%, 100% 100%, 0 100%)",
+    });
+
+    tl.to(separator, {
+      clipPath: "polygon(0 56%, 100% 44%, 100% 100%, 0% 100%)",
+      ease: "power1.in",
+      duration: 0.45,
+    });
+
+    tl.to(
+      separator,
+      {
+        clipPath: "polygon(0 0%, 100% 0%, 100% 100%, 0 100%)",
+        ease: "power1.out",
+        duration: 0.45,
+      },
+      ">"
+    );
+
+    tl.to({}, { duration: .1 })
+
+    separatortl.add(tl, ">");
+  });
 }
 
 function setButtonHover() {
@@ -662,6 +699,5 @@ function setButtonHover() {
         duration: 0.2,
       });
     });
-
   });
 }
