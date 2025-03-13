@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setPreloaderInitalState();
   preloaderAnimation();
   gsap.registerPlugin(ScrollTrigger);
-  gsap.registerPlugin(ScrollTo);
+  gsap.registerPlugin(ScrollToPlugin);
   disableScroll();
   scrollToTopInstant();
 });
@@ -20,6 +20,11 @@ window.addEventListener("load", () => {
   setTimeout(setParallax, 1000);
   setTimeout(setBoardsScrollAnimation, 1000);
   setButtonHover();
+  setSectionHeaderAppear();
+  setTextOnScroll();
+  setImageOnScroll();
+  setTimeout(setFooterAppear, 1000);
+  setTimeout(setProcessHover, 1000);
 });
 
 const lenis = new Lenis({
@@ -53,7 +58,7 @@ let typeSplit = new SplitType("[text-split]", {
 
 //function to scroll back to top
 function scrollToTopInstant() {
-  gsap.to(window, { scrollTo: 0 });
+  gsap.to(window, { scrollTo: { y: 0 } });
 }
 
 //function to scroll back to top
@@ -68,6 +73,8 @@ function preloaderAnimation() {
   const preloadertl = gsap.timeline({
     defaults: { duration: 1, ease: "power2.out" },
   });
+
+  preloadertl.to({}, { duration: 0.5 });
 
   // 1st step: tracing the line
   preloadertl.to(".preloader_horizon-border", {
@@ -167,26 +174,11 @@ function EntranceAnimation() {
     "<"
   );
 
-  // landingEntranceTl.to(
-  //   ".hero_backgroundvideo",
-  //   {
-  //     //scale the sun
-  //     scale: 1.5,
-  //     duration: 1.4,
-  //     ease: "power2.out",
-  //   },
-  //   "<"
-  // );
-
-  landingEntranceTl.from(
-    ".cookie_container",
-    {
-      scaleX: 0,
-      duration: 0.5,
-      ease: "power1.in",
-    },
-    "-=0.5"
-  );
+  landingEntranceTl.from(".cookie_container", {
+    scaleX: 0,
+    duration: 0.5,
+    ease: "power1.in",
+  });
 
   landingEntranceTl.from(
     ".section_hero .patch",
@@ -211,9 +203,10 @@ function EntranceAnimation() {
 
   landingEntranceTl.from(
     "[entrance-typing-effect] .char",
-    { opacity: 0, duration: 0.00001, stagger: 0.004 },
+    { yPercent: 120, stagger: 0.002, duration: 0.35 },
     ">"
   );
+
   landingEntranceTl.from(
     ".nav_clock",
     { yPercent: -200, ease: "power2.out", duration: 0.3 },
@@ -221,20 +214,21 @@ function EntranceAnimation() {
   );
   landingEntranceTl.from(
     ".hero_header_firstrow .char",
-    { yPercent: 120, ease: "power2.out", duration: 0.1, stagger: 0.05 },
+    { yPercent: 120, ease: "power2.out", duration: 0.5, stagger: 0.01 },
     "-=0.2"
   );
-  landingEntranceTl.from(
-    ".hero_header_secondrow .char",
-    { yPercent: -120, ease: "power2.out", duration: 0.1, stagger: 0.05 },
-    "+=0.2"
-  );
+  landingEntranceTl.from(".hero_header_secondrow .char", {
+    yPercent: -120,
+    ease: "power2.out",
+    duration: 0.5,
+    stagger: 0.01,
+  });
   landingEntranceTl.from(
     "[entrance-paragraph-slide-down] .char",
     {
       yPercent: 120,
       ease: "power2.out",
-      duration: 0.6,
+      duration: 0.5,
       onComplete: () => {
         enableScroll();
       },
@@ -267,7 +261,7 @@ function updateClock() {
   const timeString = new Intl.DateTimeFormat("fr-FR", options).format(now); // use french format
 
   // inject text into p element
-  $(".nav_clock").text("vannes, " + timeString);
+  $("[clock]").text("vannes, " + timeString);
 }
 
 function setNavBarMenu() {
@@ -433,7 +427,7 @@ function setIntroLottie() {
     renderer: "svg",
     loop: false, // or false if you don't want it to loop
     autoplay: false, // Disable autoplay
-    path: "https://cdn.prod.website-files.com/67939e9483ef1b9e88e964c0/67a3abaf4e23619f5632ed13_002b56c657410d727d0cb416d58ea23f_markless---lottie-logo-animation.json",
+    path: "https://cdn.prod.website-files.com/67939e9483ef1b9e88e964c0/67a3abaf4e23619f5632ed13_7c2d8261d61afb62b7b64196a22be566_markless---lottie-logo-animation.json",
   });
 
   ScrollTrigger.create({
@@ -453,7 +447,7 @@ function setFooterLottie() {
     renderer: "svg",
     loop: false, // or false if you don't want it to loop
     autoplay: false, // Disable autoplay
-    path: "https://cdn.prod.website-files.com/67939e9483ef1b9e88e964c0/67a3abaf4e23619f5632ed13_002b56c657410d727d0cb416d58ea23f_markless---lottie-logo-animation.json",
+    path: "https://cdn.prod.website-files.com/67939e9483ef1b9e88e964c0/67a3abaf4e23619f5632ed13_7c2d8261d61afb62b7b64196a22be566_markless---lottie-logo-animation.json",
   });
 
   ScrollTrigger.create({
@@ -468,11 +462,13 @@ function setFooterLottie() {
 }
 
 function disableScroll() {
-  $("body").css("overflow", "hidden"); // Désactive le scroll
+  $(".page-wrapper").css("overflow", "hidden");
+  $(".page-wrapper").css("height", "100vh");
 }
 
 function enableScroll() {
-  $("body").css("overflow", ""); // Réactive le scroll
+  $(".page-wrapper").css("overflow", "");
+  $(".page-wrapper").css("height", "");
 }
 
 function setProcessLottie() {
@@ -649,7 +645,7 @@ function setBoardsScrollAnimation() {
       ">"
     );
 
-    tl.to({}, { duration: .1 })
+    tl.to({}, { duration: 0.1 });
 
     separatortl.add(tl, ">");
   });
@@ -700,4 +696,155 @@ function setButtonHover() {
       });
     });
   });
+}
+
+function setSectionHeaderAppear() {
+  let $sectionHeaders = $(".section-heading");
+
+  $sectionHeaders.each(function () {
+    let tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: $(this),
+        start: "top 40%",
+        end: "bottom top",
+        ease: "linear",
+      },
+    });
+
+    $(this).find(".horizontal-line").css("transform-origin", "left");
+    tl.from($(this).find(".horizontal-line"), {
+      scaleX: 0,
+      ease: "power1.out",
+      duration: 0.7,
+      stagger: 0.05,
+    });
+
+    tl.from($(this).find(".char"), {
+      yPercent: 120,
+      ease: "power2.out",
+      duration: 0.5,
+      stagger: 0.01,
+    }),
+      "+=0.7";
+  });
+}
+
+function setTextOnScroll() {
+  $texts = $("[appear-on-scroll]");
+
+  $texts.each(function () {
+    let tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: $(this),
+        start: "top 40%",
+        end: "bottom top",
+      },
+    });
+    tl.from($(this).find(".char"), {
+      yPercent: 120,
+      stagger: 0.002,
+      duration: 0.35,
+    });
+  });
+}
+
+function setImageOnScroll() {
+  $images = $("[scale-on-scroll]");
+
+  $images.each(function () {
+    let tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: $(this),
+        start: "top 40%",
+        end: "bottom top",
+      },
+    });
+
+    tl.from($(this), { scale: 0.8, duration: 0.7, ease: "power2.out" });
+  });
+}
+
+function setFooterAppear() {
+
+  $footer = $(".footer");
+  $lines = $footer.find(".horizontal-line");
+  $clock = $footer.find("[clock]");
+
+  let tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: $footer,
+      start: "90% bottom",
+      end: "bottom bottom",
+    },
+  });
+
+  $lines.each(function(index) {
+    $(this).css("transform-origin", index % 2 === 0 ? "left" : "right");
+  });
+
+  tl.from($lines, {
+    scaleX: 0,
+    stagger: 0.05,
+    duration: 0.5,
+  });
+
+  tl.from($clock, {
+    yPercent: 120,
+    opacity: 0,
+    duration: 0.35,
+    delay: 1.2,
+  }, "<");
+
+
+  tl.from($footer.find(".char"), {
+    yPercent: 120,
+    stagger: 0.002,
+    duration: 0.35,
+    delay: .3,
+  }, "<");
+}
+
+function setProcessHover() {
+  
+    const $processSection = $(".section_process");
+    const $processCursor = $(".process_cursor");
+    const $horizontal = $processCursor.find(".horizontal");
+    const $vertical = $processCursor.find(".vertical");
+
+    $processSection.on("mousemove", function (e) {
+      const offset = $processCursor.offset();
+      const width = $processCursor.outerWidth();
+      const height = $processCursor.outerHeight();
+
+      const x = e.pageX - offset.left;
+      const y = e.pageY - offset.top;
+
+      gsap.to($horizontal, {
+        duration: 0.2,
+        attr: { y1: y, y2: y, x1: 0, x2: width },
+        ease: "power2.out",
+      });
+
+      gsap.to($vertical, {
+        duration: 0.2,
+        attr: { x1: x, x2: x, y1: 0, y2: height },
+        ease: "power2.out",
+      });
+    });
+
+    gsap.set([$horizontal, $vertical], { opacity: 0 });
+
+    $processSection.on("mouseleave", function () {
+      gsap.to([$horizontal, $vertical], {
+        opacity: 0,
+        duration: 0.2,
+      });
+    });
+
+    $processSection.on("mouseenter", function () {
+      gsap.to([$horizontal, $vertical], {
+        opacity: 1,
+        duration: 0.2,
+      });
+    });
 }
