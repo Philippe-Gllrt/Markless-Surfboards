@@ -21,7 +21,7 @@ window.addEventListener("load", () => {
   updateClock();
   setNavBarMenu();
   sectBarCodeMovement();
-  setInterval(galleryBehavior, 7000);
+  // setInterval(galleryBehavior, 7000);
   galleryBehavior();
   setButtonHover();
 });
@@ -56,9 +56,9 @@ const formats = [
 let formatsReplicate = formats.slice();
 
 function galleryBehavior() {
+  $('.gallery-gallery_pictures-wrapper').empty();
   setGallery();
-  galleryWaveIn();
-  setTimeout(galleryWaveOut, 5000)
+  galleryWaveAnimation()
 }
 
 function setGallery() {
@@ -104,7 +104,7 @@ function setGallery() {
   }; //end loop for
 }
 
-function galleryWaveIn() {
+function galleryWaveAnimation() {
   //faire deux tl, une top une bottom, les mettre dans une main
   //recup top et bottom puis .find les wrappers
   let tl = gsap.timeline();
@@ -120,18 +120,18 @@ function galleryWaveIn() {
     duration: 1,
     ease: "power3.out",
     stagger: .07
-  }, "<")
-}
+  }, "<");
 
-function galleryWaveOut() {
-  let tl = gsap.timeline();
   tl.to('.gallery-gallery_item-wrapper', {
     clipPath: "inset(0 0 100% 0)",
     duration: 0.5,
     ease: "power2.out",
     stagger: .07,
-    onComplete: () => {$('.gallery-gallery_pictures-wrapper').empty();}
-  });
+    onComplete: () => {galleryBehavior();}
+  }, "+=3");
+
+  $('.gallery-gallery_pictures-wrapper').on('mouseenter', () => {tl.pause()});
+  $('.gallery-gallery_pictures-wrapper').on('mouseleave', () => {tl.play()});
 }
 
 function setGalleryHover() {
