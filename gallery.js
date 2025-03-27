@@ -24,6 +24,7 @@ window.addEventListener("load", () => {
   // setInterval(galleryBehavior, 7000);
   galleryBehavior();
   setButtonHover();
+  setGalleryHover();
 });
 
 const SplitType = window.SplitType;
@@ -56,9 +57,9 @@ const formats = [
 let formatsReplicate = formats.slice();
 
 function galleryBehavior() {
-  $('.gallery-gallery_pictures-wrapper').empty();
+  $(".gallery-gallery_pictures-wrapper").empty();
   setGallery();
-  galleryWaveAnimation()
+  galleryWaveAnimation();
 }
 
 function setGallery() {
@@ -78,9 +79,9 @@ function setGallery() {
       const imageLink = imagesLinksReplicate.splice(randomImageIndex, 1)[0];
 
       let $div = $("<div></div>").css({
-        "height": divHeight + "%",
+        height: divHeight + "%",
         "aspect-ratio": divFormat,
-        "overflow": "hidden",
+        overflow: "hidden",
         "clip-path": "inset(0 0 0 0)",
       });
 
@@ -92,51 +93,86 @@ function setGallery() {
       $image.attr("src", imageLink);
       $image.attr("class", "gallery-gallery_item");
       $image.css({
-        "width": "120%",
-        "height": "100%",
-        "object-fit": "cover"
+        width: "120%",
+        height: "100%",
+        "object-fit": "cover",
       });
 
       $div.append($image);
       checkFormatArray();
       checkImagesArray();
     });
-  }; //end loop for
+  } //end loop for
 }
 
 function galleryWaveAnimation() {
   //faire deux tl, une top une bottom, les mettre dans une main
   //recup top et bottom puis .find les wrappers
   let tl = gsap.timeline();
-  tl.from('.gallery-gallery_item-wrapper', {
+  tl.from(".gallery-gallery_item-wrapper", {
     clipPath: "inset(0 0 100% 0)",
     duration: 0.5,
     ease: "power2.out",
-    stagger: .07
+    stagger: 0.07,
   });
 
-  tl.from('.gallery-gallery_item', {
-    scale: 1.5,
-    duration: 1,
-    ease: "power3.out",
-    stagger: .07
-  }, "<");
+  tl.from(
+    ".gallery-gallery_item",
+    {
+      scale: 1.5,
+      duration: 1,
+      ease: "power3.out",
+      stagger: 0.07,
+    },
+    "<"
+  );
 
-  tl.to('.gallery-gallery_item-wrapper', {
-    clipPath: "inset(0 0 100% 0)",
-    duration: 0.5,
-    ease: "power2.out",
-    stagger: .07,
-    onComplete: () => {galleryBehavior();}
-  }, "+=3");
+  tl.to(
+    ".gallery-gallery_item-wrapper",
+    {
+      clipPath: "inset(0 0 100% 0)",
+      duration: 0.5,
+      ease: "power2.out",
+      stagger: 0.07,
+      onComplete: () => {
+        galleryBehavior();
+      },
+    },
+    "+=3"
+  );
 
-  $('.gallery-gallery_pictures-wrapper').on('mouseenter', () => {tl.pause()});
-  $('.gallery-gallery_pictures-wrapper').on('mouseleave', () => {tl.play()});
+  $(".gallery-gallery_pictures-wrapper").on("mouseenter", () => {
+    tl.pause();
+  });
+  $(".gallery-gallery_pictures-wrapper").on("mouseleave", () => {
+    tl.play();
+  });
 }
 
 function setGalleryHover() {
-  //Selects containers
-  //On hover, x move the containers
+  const $wrapper = $(".gallery-gallery_pictures-wrapper");
+  const maxOffset = 10;
+
+  $(".gallery-gallery_pictures-wrapper").each(function () {
+    $(this).on("mousemove", function (e) {
+      let mouseX = e.clientX / $(window).width(); // 0 (gauche) à 1 (droite)
+      let offset = -maxOffset + mouseX * maxOffset * 2; // Déplacement de -20% à +20%
+
+      gsap.to($(this), {
+        xPercent: -offset,
+        duration: 0.3,
+        ease: "power2.out",
+      });
+    });
+
+    $(this).on("mouseleave", function (e) {
+      gsap.to($(this), {
+        xPercent: 0,
+        duration: 0.7,
+        ease: "power2.out",
+      });
+    });
+  });
 }
 
 function setGalleryClick() {}
