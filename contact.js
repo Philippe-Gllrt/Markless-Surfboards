@@ -2,6 +2,7 @@ import {
   setNavBarMenu,
   sectBarCodeMovement,
   updateClock,
+  setPageTransition,
   setFooterAppear,
   scrollToTopInstant,
   scrollToTop,
@@ -23,6 +24,7 @@ let typeSplit = new SplitType("[text-split]", {
 });
 
 window.addEventListener("load", () => {
+  // setPageTransition();
   setInterval(updateClock, 1000);
   updateClock();
   setNavBarMenu();

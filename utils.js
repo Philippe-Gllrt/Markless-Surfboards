@@ -308,3 +308,97 @@ export function setFooterAppear() {
     "<"
   );
 }
+
+export function setPageTransition() {
+
+  console.log("function loaded");
+  // Code that runs on pageload
+  const pageLoadTl = gsap.timeline();
+  const loadDuration = 0.3;
+
+  pageLoadTl.to(".transition_panel", {
+    clipPath: "polygon(0 56%, 100% 44%, 100% 100%, 0% 100%)",
+    duration: loadDuration,
+    stagger: -0.1,
+    ease: "power1.in",
+    onStart: () => {
+      gsap.set(".transition_wrapper", { display: "block" });
+    },
+  });
+
+  pageLoadTl.to(
+    ".transition_panel",
+    {
+      clipPath: "polygon(0 100%, 100% 100%, 100% 100%, 0 100%)",
+      duration: loadDuration,
+      delay: loadDuration,
+      stagger: -0.1,
+      ease: "power1.out",
+      onComplete: () => {
+        gsap.set(".transition_wrapper", { display: "none" });
+      },
+    },
+    "<"
+  );
+
+  // Code that runs on click of a link
+
+  $("a").on("click", function (e) {
+    if (
+      $(this).prop("hostname") === window.location.host &&
+      $(this).attr("href").indexOf("#") === -1 &&
+      $(this).attr("target") !== "_blank"
+    ) {
+      e.preventDefault();
+      let destination = $(this).attr("href");
+
+      const pageTransitionTl = gsap.timeline();
+      const transtionDuration = 0.2;
+      gsap.set(".transtion-panel", {clipPath: "polygon(0 100%, 100% 100%, 100% 100%, 0 100%)"})
+
+      pageTransitionTl.to(".transition_panel", {
+        clipPath: "polygon(0 56%, 100% 44%, 100% 100%, 0% 100%)",
+        duration:  transtionDuration,
+        stagger: 0.1,
+        ease: "power1.in",
+        onStart: () => {
+          gsap.set(".transition_wrapper", { display: "block" });
+        },
+      });
+
+      pageTransitionTl.to(".transition_panel", {
+        clipPath: "polygon(0 0%, 100% 0%, 100% 100%, 0 100%)",
+        duration:  transtionDuration,
+        delay:  transtionDuration,
+        stagger: 0.1,
+        ease: "power1.out",
+        onComplete: () => {
+          window.location = destination;
+        },
+      }, "<");
+
+
+      // gsap.fromTo(
+      //   ".load_grid-item",
+      //   {
+      //     opacity: 0
+      //   },
+      //   {
+      //     opacity: 1,
+      //     duration: 0.001,
+      //     stagger: { amount: 0.5, from: "random" }, //you can also try a from: "start" or "end" -- get creative!
+      //     onComplete: () => {
+      //       window.location = destination;
+      //     }
+      //   }
+      // );
+    }
+  });
+
+  // On click of the back button
+  window.onpageshow = function (event) {
+    if (event.persisted) {
+      window.location.reload();
+    }
+  };
+}

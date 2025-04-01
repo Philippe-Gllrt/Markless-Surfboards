@@ -9,11 +9,13 @@ import {
   enableScroll,
   setParallax,
   setButtonHover,
+  setPageTransition,
 } from "./utils.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   gsap.registerPlugin(ScrollTrigger);
   gsap.registerPlugin(ScrollToPlugin);
+  setPageTransition();
 });
 
 window.addEventListener("load", () => {
@@ -24,7 +26,9 @@ window.addEventListener("load", () => {
   // setInterval(galleryBehavior, 7000);
   galleryBehavior();
   setButtonHover();
-  setGalleryHover();
+  if ($(window).width() <= 991) { setGalleryHover() };
+  setImageHover();
+  setGalleryClick();
 });
 
 const SplitType = window.SplitType;
@@ -60,13 +64,22 @@ function galleryBehavior() {
   $(".gallery-gallery_pictures-wrapper").empty();
   setGallery();
   galleryWaveAnimation();
+  setImageHover();
+  setGalleryClick();
 }
 
 function setGallery() {
   const wrappers = $(".gallery-gallery_pictures-wrapper");
+  let itemCount;
+
+  if ($(window).width() <= 991) {
+    itemCount = 6;
+  } else {
+    itemCount = 10;
+  }
 
   //until the containers are full: create a div with format. Inject inmage with 120% of width. Inject div in container
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < itemCount; i++) {
     wrappers.each(function () {
       const divHeight = Math.floor(Math.random() * (100 - 50 + 1)) + 50;
       const randomFormatIndex = Math.floor(
@@ -105,18 +118,16 @@ function setGallery() {
   } //end loop for
 }
 
+let waveTl = gsap.timeline();
 function galleryWaveAnimation() {
-  //faire deux tl, une top une bottom, les mettre dans une main
-  //recup top et bottom puis .find les wrappers
-  let tl = gsap.timeline();
-  tl.from(".gallery-gallery_item-wrapper", {
+  waveTl.from(".gallery-gallery_item-wrapper", {
     clipPath: "inset(0 0 100% 0)",
     duration: 0.5,
-    ease: "power2.out",
+    ease: "power1.out",
     stagger: 0.07,
   });
 
-  tl.from(
+  waveTl.from(
     ".gallery-gallery_item",
     {
       scale: 1.5,
@@ -127,12 +138,12 @@ function galleryWaveAnimation() {
     "<"
   );
 
-  tl.to(
+  waveTl.to(
     ".gallery-gallery_item-wrapper",
     {
       clipPath: "inset(0 0 100% 0)",
       duration: 0.5,
-      ease: "power2.out",
+      ease: "power1.out",
       stagger: 0.07,
       onComplete: () => {
         galleryBehavior();
@@ -142,10 +153,10 @@ function galleryWaveAnimation() {
   );
 
   $(".gallery-gallery_pictures-wrapper").on("mouseenter", () => {
-    tl.pause();
+    waveTl.pause();
   });
   $(".gallery-gallery_pictures-wrapper").on("mouseleave", () => {
-    tl.play();
+    waveTl.play();
   });
 }
 
@@ -161,7 +172,7 @@ function setGalleryHover() {
       gsap.to($(this), {
         xPercent: -offset,
         duration: 0.3,
-        ease: "power2.out",
+        ease: "power1.out",
       });
     });
 
@@ -169,13 +180,32 @@ function setGalleryHover() {
       gsap.to($(this), {
         xPercent: 0,
         duration: 0.7,
-        ease: "power2.out",
+        ease: "power1.out",
       });
     });
   });
 }
 
-function setGalleryClick() {}
+function setImageHover() {
+  $(".gallery-gallery_item").each(function () {
+    $(this).hover(
+      () => {
+        gsap.to($(this), {
+          scale: 1.2,
+          duration: 0.7,
+          ease: "power1.out",
+        });
+      },
+      () => {
+        gsap.to($(this), {
+          scale: 1,
+          duration: 0.7,
+          ease: "power1.out",
+        });
+      }
+    );
+  });
+}
 
 function checkImagesArray() {
   if (imagesLinksReplicate.length == 0) {
@@ -187,4 +217,82 @@ function checkFormatArray() {
   if (formatsReplicate.length == 0) {
     formatsReplicate = formats.slice();
   }
+}
+
+function setGalleryClick() {
+  const $modal = $(".gallery-gallery_modal");
+  const $imageContainer = $(".gallery-gallery_modal-image-container");
+  const $image = $(".gallery-gallery_modal-image");
+
+  gsap.set($modal, { opacity: 0 });
+  // gsap.set($image, {clipPath: "inset(100% 0 0 0)"})
+
+  $(".gallery-gallery_item").each(function () {
+    $(this).on("click", function () {
+      const src = $(this).attr("src");
+      $image.attr("src", src);
+      $(this).addClass("active")
+      gsap.set($imageContainer, {
+        clipPath: "inset(100% 0 0 0)",
+      });
+
+      let tl = gsap.timeline({});
+
+      tl.set($modal, { display: "flex" });
+
+      setTimeout(() => {
+        waveTl.pause();
+      }, 50);
+
+      tl.to($(this), {
+        clipPath: "inset(100% 0 0 0)",
+        duration: 0.3,
+        ease: "power1.out",
+      });
+
+      tl.to(
+        $modal,
+        {
+          opacity: 1,
+          duration: 0.4,
+          ease: "power1.out",
+        },
+        "<"
+      );
+
+      tl.to($imageContainer, {
+        clipPath: "inset(0% 0 0 0)",
+        duration: 0.5,
+        ease: "power1.out",
+      });
+    });
+  });//end each loop
+
+  $modal.on("click", ()=>{
+    let tl = gsap.timeline();
+
+    tl.to($imageContainer, {
+      clipPath: "inset(100% 0 0 0)",
+      duration: 0.3,
+      ease: "power1.out",
+    });
+
+    tl.to(
+      $modal,
+      {
+        opacity: 0,
+        duration: 0.4,
+        ease: "power1.out",
+      },
+    );
+
+    tl.to($(".active"), {
+      clipPath: "inset(0% 0 0 0)",
+      duration: 0.5,
+      ease: "power1.out",
+      onComplete: () => {$(".active").removeClass("active"); waveTl.play()}
+    }, "<");
+    tl.set($modal, { display: "none" });
+
+  });
 }
