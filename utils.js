@@ -319,7 +319,7 @@ export function setPageTransition() {
   pageLoadTl.to(".transition_panel", {
     clipPath: "polygon(0 56%, 100% 44%, 100% 100%, 0% 100%)",
     duration: loadDuration,
-    stagger: -0.1,
+    stagger: -0.05,
     ease: "power1.in",
     onStart: () => {
       gsap.set(".transition_wrapper", { display: "block" });
@@ -332,7 +332,7 @@ export function setPageTransition() {
       clipPath: "polygon(0 100%, 100% 100%, 100% 100%, 0 100%)",
       duration: loadDuration,
       delay: loadDuration,
-      stagger: -0.1,
+      stagger: -0.05,
       ease: "power1.out",
       onComplete: () => {
         gsap.set(".transition_wrapper", { display: "none" });
@@ -359,7 +359,7 @@ export function setPageTransition() {
       pageTransitionTl.to(".transition_panel", {
         clipPath: "polygon(0 56%, 100% 44%, 100% 100%, 0% 100%)",
         duration:  transtionDuration,
-        stagger: 0.1,
+        stagger: 0.05,
         ease: "power1.in",
         onStart: () => {
           gsap.set(".transition_wrapper", { display: "block" });
@@ -370,7 +370,7 @@ export function setPageTransition() {
         clipPath: "polygon(0 0%, 100% 0%, 100% 100%, 0 100%)",
         duration:  transtionDuration,
         delay:  transtionDuration,
-        stagger: 0.1,
+        stagger: 0.05,
         ease: "power1.out",
         onComplete: () => {
           window.location = destination;
