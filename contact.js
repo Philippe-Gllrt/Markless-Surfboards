@@ -24,7 +24,7 @@ let typeSplit = new SplitType("[text-split]", {
 });
 
 window.addEventListener("load", () => {
-  // setPageTransition();
+  setPageTransition();
   setInterval(updateClock, 1000);
   updateClock();
   setNavBarMenu();
