@@ -9,35 +9,47 @@ import {
   enableScroll,
   setParallax,
   setButtonHover,
+  setPageTransition,
 } from "./utils.js";
 
+
+if (sessionStorage.getItem("visited") !== "true") {
+//cache le rose
+$('.transition_wrapper').css("display", "none")
+} else {
+  $('.preloader_wrapper').css("display", "none")
+}
+
+
 document.addEventListener("DOMContentLoaded", () => {
-  setPreloaderInitalState();
-  preloaderAnimation();
+  //setPreloaderInitalState();
   gsap.registerPlugin(ScrollTrigger);
   gsap.registerPlugin(ScrollToPlugin);
-  disableScroll();
+  if (sessionStorage.getItem("visited") !== "true") {disableScroll(); preloaderAnimation();}
   scrollToTopInstant();
+  
 });
 
 window.addEventListener("load", () => {
   setInterval(updateClock, 1000);
   updateClock();
-  EntranceAnimation();
+  if (sessionStorage.getItem("visited") !== "true") {EntranceAnimation();}
+  
   setNavBarMenu();
   setIntroLottie();
   setFooterLottie();
   setProcessLottie();
   sectBarCodeMovement();
-  setTimeout(setProcessFadingText, 1000);
-  setTimeout(setParallax, 1000);
-  setTimeout(setBoardsScrollAnimation, 1000);
+  setTimeout(setProcessFadingText, 500);
+  setTimeout(setParallax, 500);
+  setTimeout(setBoardsScrollAnimation, 500);
   setButtonHover();
   setSectionHeaderAppear();
   setTextOnScroll();
   setImageOnScroll();
-  setTimeout(setFooterAppear, 1000);
-  setTimeout(setProcessHover, 1000);
+  setTimeout(setFooterAppear, 500);
+  setTimeout(setProcessHover, 500);
+  setTimeout(setPageTransition, 500)
 });
 
 const lenis = new Lenis({

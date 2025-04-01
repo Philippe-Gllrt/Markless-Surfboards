@@ -26,7 +26,7 @@ window.addEventListener("load", () => {
   // setInterval(galleryBehavior, 7000);
   galleryBehavior();
   setButtonHover();
-  if ($(window).width() <= 991) { setGalleryHover() };
+  if ($(window).width() >= 991) { setGalleryHover() };
   setImageHover();
   setGalleryClick();
 });

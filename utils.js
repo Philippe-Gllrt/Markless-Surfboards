@@ -310,36 +310,39 @@ export function setFooterAppear() {
 }
 
 export function setPageTransition() {
-
-  console.log("function loaded");
   // Code that runs on pageload
   const pageLoadTl = gsap.timeline();
   const loadDuration = 0.3;
 
-  pageLoadTl.to(".transition_panel", {
-    clipPath: "polygon(0 56%, 100% 44%, 100% 100%, 0% 100%)",
-    duration: loadDuration,
-    stagger: -0.05,
-    ease: "power1.in",
-    onStart: () => {
-      gsap.set(".transition_wrapper", { display: "block" });
-    },
-  });
-
-  pageLoadTl.to(
-    ".transition_panel",
-    {
-      clipPath: "polygon(0 100%, 100% 100%, 100% 100%, 0 100%)",
+  if (window.location.pathname !== "/" || sessionStorage.getItem("visited") === "true") {
+    pageLoadTl.to(".transition_panel", {
+      clipPath: "polygon(0 56%, 100% 44%, 100% 100%, 0% 100%)",
       duration: loadDuration,
-      delay: loadDuration,
       stagger: -0.05,
-      ease: "power1.out",
-      onComplete: () => {
-        gsap.set(".transition_wrapper", { display: "none" });
+      ease: "power1.in",
+      onStart: () => {
+        gsap.set(".transition_wrapper", { display: "block" });
       },
-    },
-    "<"
-  );
+    });
+  
+    pageLoadTl.to(
+      ".transition_panel",
+      {
+        clipPath: "polygon(0 100%, 100% 100%, 100% 100%, 0 100%)",
+        duration: loadDuration,
+        delay: loadDuration,
+        stagger: -0.05,
+        ease: "power1.out",
+        onComplete: () => {
+          gsap.set(".transition_wrapper", { display: "none" });
+        },
+      },
+      "<"
+    );
+
+  } else if (sessionStorage.getItem("visited") !== "true") {
+    sessionStorage.setItem("visited", "true")
+  }
 
   // Code that runs on click of a link
 
@@ -376,22 +379,6 @@ export function setPageTransition() {
           window.location = destination;
         },
       }, "<");
-
-
-      // gsap.fromTo(
-      //   ".load_grid-item",
-      //   {
-      //     opacity: 0
-      //   },
-      //   {
-      //     opacity: 1,
-      //     duration: 0.001,
-      //     stagger: { amount: 0.5, from: "random" }, //you can also try a from: "start" or "end" -- get creative!
-      //     onComplete: () => {
-      //       window.location = destination;
-      //     }
-      //   }
-      // );
     }
   });
 
