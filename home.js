@@ -422,7 +422,7 @@ function setBoardsScrollAnimation() {
   }
 
   let imageSeparators = $(
-    ".home-boards_background-picture-greysperator"
+    ".home-boards_background-picture-whitesperator"
   ).toArray();
   let separatortl = gsap.timeline({
     scrollTrigger: {
