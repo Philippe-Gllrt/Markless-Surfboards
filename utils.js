@@ -27,7 +27,7 @@ export function updateClock() {
 
 export function setNavBarMenu() {
   gsap.set(".nav_blurbackdrop", { opacity: 0, display: "none" });
-  gsap.set(".nav_menu-container", { display: "none" });
+  // gsap.set(".nav_menu-container", { display: "none" });
   let isOpen = false;
 
   //Seting the timeline animation
