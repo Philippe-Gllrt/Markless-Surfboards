@@ -219,6 +219,7 @@ export function setParallax() {
 export function setButtonHover() {
   $(".button").each(function () {
     const $btn = $(this).find(".button_second-row");
+    const $text = $btn.find(".heading-style-h2");
     const $svg = $btn.find("svg");
     const $horizontal = $svg.find(".horizontal");
     const $vertical = $svg.find(".vertical");
@@ -250,15 +251,27 @@ export function setButtonHover() {
     $btn.on("mouseleave", function () {
       gsap.to([$horizontal, $vertical, $background], {
         opacity: 0,
-        duration: 0.2,
+        duration: 0.3,
       });
+
+      gsap.to($text, {
+        opacity: 1,
+        scale: 1,
+        duration: 0.3,
+      })
     });
 
     $btn.on("mouseenter", function () {
       gsap.to([$horizontal, $vertical, $background], {
         opacity: 1,
-        duration: 0.2,
+        duration: 0.3,
       });
+
+      gsap.to($text, {
+        opacity: .8,
+        scale: .95,
+        duration: 0.3,
+      })
     });
   });
 }
