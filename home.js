@@ -10,6 +10,8 @@ import {
   setParallax,
   setButtonHover,
   setPageTransition,
+  setImageOnScroll,
+  setTextOnScroll,
 } from "./utils.js";
 
 
@@ -493,40 +495,6 @@ function setSectionHeaderAppear() {
   });
 }
 
-function setTextOnScroll() {
-  let $texts = $("[appear-on-scroll]");
-
-  $texts.each(function () {
-    let tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: $(this),
-        start: "top 40%",
-        end: "bottom top",
-      },
-    });
-    tl.from($(this).find(".char"), {
-      yPercent: 120,
-      stagger: 0.002,
-      duration: 0.35,
-    });
-  });
-}
-
-function setImageOnScroll() {
-  let $images = $("[scale-on-scroll]");
-
-  $images.each(function () {
-    let tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: $(this),
-        start: "top 40%",
-        end: "bottom top",
-      },
-    });
-
-    tl.from($(this), { scale: 0.8, duration: 0.7, ease: "power2.out" });
-  });
-}
 
 function setProcessHover() {
   const $processSection = $(".home-process_section");
