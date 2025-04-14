@@ -9,9 +9,12 @@ import {
   enableScroll,
   setParallax,
   setButtonHover,
-  setPageTransition,
   setImageOnScroll,
   setTextOnScroll,
+  transitionEntrance,
+  transitionExit,
+  setTransitionDimension,
+  setPageTransition
 } from "./utils.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -40,14 +43,12 @@ let typeSplit = new SplitType("[text-split]", {
   tagName: "span",
 });
 
-
 function setCardsBehavior() {
   gsap.set(".boards-model_card", { scale: 0.8 });
   gsap.set(".boards-model_card-title", { opacity: 0 });
   gsap.set($(".boards-model_info-wrapper").find(".char"), {
     yPercent: 120,
   });
-
 
   gsap.registerPlugin(Draggable);
 
@@ -133,9 +134,9 @@ function setCardsBehavior() {
           scale: 0.8,
           duration: 0.3,
         });
-      };
+      }
     });
-  };
+  }
   scaleActiveCard();
 }
 
@@ -164,7 +165,7 @@ function activeCardMarkee() {
     const track = $(this).find(".boards_model_title-track");
     const text = $(this).find(".boards-model_card-title");
     const container = $(this).find(".boards_model_title-container");
-   
+
     if (this === closestCard[0] && !$(this).hasClass("marquee-active")) {
       gsap.set(container, { display: "flex" });
       gsap.to(text, {
@@ -179,7 +180,11 @@ function activeCardMarkee() {
       });
 
       $(this).addClass("marquee-active");
-      refreshInfo(index % $($(".boards-models_info-list")[0]).find(".boards-model_info-item").length)
+      refreshInfo(
+        index %
+          $($(".boards-models_info-list")[0]).find(".boards-model_info-item")
+            .length
+      );
     } else if (this != closestCard[0] && $(this).hasClass("marquee-active")) {
       gsap.to(text, {
         opacity: 0,
@@ -195,30 +200,56 @@ function activeCardMarkee() {
   });
 }
 
-
 var targetWrapper = $(".boards-model_info-item")[0];
 
 function refreshInfo(index) {
   const mainTl = gsap.timeline();
 
-  
-    mainTl.to($(targetWrapper).find(".char"), {
+  mainTl.to(
+    $(targetWrapper).find(".char"),
+    {
       yPercent: 120,
-      stagger: {amount: .5},
+      stagger: { amount: 0.5 },
       duration: 0.3,
-      onComplete: () => { gsap.set($(".boards-model_info-item").find(".char"), {yPercent: 120}) },
-    }, "<");
-   
+      onComplete: () => {
+        gsap.set($(".boards-model_info-item").find(".char"), { yPercent: 120 });
+      },
+    },
+    "<"
+  );
 
   // const textsTl = gsap.timeline()
   targetWrapper = $(".boards-model_info-item")[index];
-  
+
   // gsap.killTweensOf($(targetWrapper).find(".char"))
   mainTl.to($(targetWrapper).find(".char"), {
     yPercent: 0,
-    stagger: {amount: .5},
+    stagger: { amount: 0.5 },
     duration: 0.3,
   });
 
-  // mainTl.add(textsTl);
+  $(".boards-model_info-item").each(function () {
+    const textTl = gsap.timeline();
+    textTl.to(
+      $(this).find(".horizontal-line"),
+      {
+        scaleX: 0,
+        stagger: { amount: 0.5 },
+        duration: 0.3,
+      },
+      "<"
+    );
+
+    textTl.to(
+      $(this).find(".horizontal-line"),
+      {
+        scaleX: 1,
+        stagger: { amount: 0.5 },
+        duration: 0.3,
+        delay: 0.8,
+      },
+      "<"
+    );
+  });
 }
+

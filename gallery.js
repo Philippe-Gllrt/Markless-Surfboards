@@ -9,7 +9,10 @@ import {
   enableScroll,
   setParallax,
   setButtonHover,
-  setPageTransition,
+  transitionEntrance,
+  transitionExit,
+  setTransitionDimension,
+  setPageTransition
 } from "./utils.js";
 
 document.addEventListener("DOMContentLoaded", () => {

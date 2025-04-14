@@ -322,87 +322,6 @@ export function setFooterAppear() {
   );
 }
 
-export function setPageTransition() {
-  // Code that runs on pageload
-  const pageLoadTl = gsap.timeline();
-  const loadDuration = 0.3;
-
-  if (window.location.pathname !== "/" || sessionStorage.getItem("visited") === "true") {
-    pageLoadTl.to(".transition_panel", {
-      clipPath: "polygon(0 56%, 100% 44%, 100% 100%, 0% 100%)",
-      duration: loadDuration,
-      stagger: -0.05,
-      ease: "power1.in",
-      onStart: () => {
-        gsap.set(".transition_wrapper", { display: "block" });
-      },
-    });
-  
-    pageLoadTl.to(
-      ".transition_panel",
-      {
-        clipPath: "polygon(0 100%, 100% 100%, 100% 100%, 0 100%)",
-        duration: loadDuration,
-        delay: loadDuration,
-        stagger: -0.05,
-        ease: "power1.out",
-        onComplete: () => {
-          gsap.set(".transition_wrapper", { display: "none" });
-        },
-      },
-      "<"
-    );
-
-  } else if (sessionStorage.getItem("visited") !== "true") {
-    sessionStorage.setItem("visited", "true")
-  }
-
-  // Code that runs on click of a link
-
-  $("a").on("click", function (e) {
-    if (
-      $(this).prop("hostname") === window.location.host &&
-      $(this).attr("href").indexOf("#") === -1 &&
-      $(this).attr("target") !== "_blank"
-    ) {
-      e.preventDefault();
-      let destination = $(this).attr("href");
-
-      const pageTransitionTl = gsap.timeline();
-      const transtionDuration = 0.2;
-      gsap.set(".transtion-panel", {clipPath: "polygon(0 100%, 100% 100%, 100% 100%, 0 100%)"})
-
-      pageTransitionTl.to(".transition_panel", {
-        clipPath: "polygon(0 56%, 100% 44%, 100% 100%, 0% 100%)",
-        duration:  transtionDuration,
-        stagger: 0.05,
-        ease: "power1.in",
-        onStart: () => {
-          gsap.set(".transition_wrapper", { display: "block" });
-        },
-      });
-
-      pageTransitionTl.to(".transition_panel", {
-        clipPath: "polygon(0 0%, 100% 0%, 100% 100%, 0 100%)",
-        duration:  transtionDuration,
-        delay:  transtionDuration,
-        stagger: 0.05,
-        ease: "power1.out",
-        onComplete: () => {
-          window.location = destination;
-        },
-      }, "<");
-    }
-  });
-
-  // On click of the back button
-  window.onpageshow = function (event) {
-    if (event.persisted) {
-      window.location.reload();
-    }
-  };
-}
-
 export function setImageOnScroll() {
   let $images = $("[scale-on-scroll]");
 
@@ -435,5 +354,116 @@ export function setTextOnScroll() {
       stagger: 0.002,
       duration: 0.35,
     });
+  });
+}
+
+export function transitionEntrance() {
+  gsap.to($(".triangleGroup"), {
+    attr: { transform: "translate(0, 0)" },
+    duration: 1.5,
+    // delay: 0.3,
+    ease: "power1.inOut",
+    onStart: () => {
+      gsap.set(".transition_wrapper", { display: "block" });
+    },
+    onComplete: () => {
+      gsap.set($(".transition_wrapper"), { display: "none" });
+      gsap.set($(".triangleGroup"), {attr: { transform: "translate(-300, -300)" },})
+    },
+  });
+}
+
+export function transitionExit(destination) {
+  const pageTransitionTl = gsap.timeline();
+      const transtionDuration = 0.2;
+      gsap.set(".transition_panel-svg", {
+        clipPath: "polygon(0 100%, 100% 100%, 100% 100%, 0 100%)",
+      });
+
+      pageTransitionTl.to(".transition_panel-svg", {
+        clipPath: "polygon(0 56%, 100% 44%, 100% 100%, 0% 100%)",
+        duration: transtionDuration,
+        stagger: 0.05,
+        ease: "power1.in",
+        onStart: () => {
+          gsap.set(".transition_wrapper", { display: "block" });
+        },
+      });
+
+      pageTransitionTl.to(
+        ".transition_panel-svg",
+        {
+          clipPath: "polygon(0 0%, 100% 0%, 100% 100%, 0 100%)",
+          duration: transtionDuration,
+          delay: transtionDuration,
+          stagger: 0.05,
+          ease: "power1.out",
+          onComplete: () => {
+            window.location = destination;
+          },
+        },
+        "<"
+      );
+}
+
+export function setTransitionDimension() {
+  //Abritrary choice. bigger t is, thinner and longer is the triangle
+  const t = 2;
+
+  const u = 1.5;
+
+  //setting screen size
+  const x = 100;
+  const y = 100;
+
+  // Compute point A (summit)
+  const Ax = t * x;
+  const Ay = -t * y;
+
+  // s is the parametter defining the triangle
+  const s = y / (2 - 1 / t);
+
+  // compute rest of points
+  const Bx = s;
+  const By = s;
+  const Cx = -s;
+  const Cy = -s;
+
+  $($("polygon")[0]).attr("points", `${Ax},${-Ay} ${Bx},${-By} ${Cx},${-Cy}`);
+  $($("polygon")[1]).attr(
+    "points",
+    `${Ax},${-Ay} ${Bx * u},${-By * u} ${Cx * u},${-Cy * u}`
+  );
+}
+
+
+
+export function setPageTransition() {
+  setTransitionDimension();
+  // Code that runs on pageload
+
+  if (
+    window.location.pathname !== "/" ||
+    sessionStorage.getItem("visited") === "true"
+  ) {
+    transitionEntrance();
+  } else if (sessionStorage.getItem("visited") !== "true") {
+    sessionStorage.setItem("visited", "true");
+  }
+
+  // Code that runs on click of a link
+
+  $("a").on("click", function (e) {
+    if (
+      $(this).prop("hostname") === window.location.host &&
+      $(this).attr("href").indexOf("#") === -1 &&
+      $(this).attr("target") !== "_blank"
+    ) {
+      e.preventDefault();
+      let destination = $(this).attr("href");
+
+      transitionExit(destination);
+      
+    }
   });
 }
