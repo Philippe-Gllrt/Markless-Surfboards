@@ -358,19 +358,43 @@ export function setTextOnScroll() {
 }
 
 export function transitionEntrance() {
-  gsap.to($(".triangleGroup"), {
+  const angleBoard = Math.round(90 - (Math.atan($(window).height() / $(window).width()) * 180 / Math.PI));
+
+  console.log(angleBoard)
+  // gsap.set(".transition_board-ellipse", {
+  //   transformOrigin: "center", // Définir le point d'origine de la transformation
+  //   transformBox: "fill-box",  // Utiliser la boîte de remplissage comme référence
+  //   rotation: angleBoard,      // Appliquer la rotation
+  // });
+  gsap.set(".transition_board-ellipse", {
+    // transform: `translate(-8, -4) rotate(${angleBoard}, 0, 0)`,
+    attr: { transform: `translate(-8, -4) rotate(${angleBoard}, 0, 0)` }
+    // rotation: angleBoard,      // Appliquer la rotation
+  });
+  
+
+
+  let transitionEntranceTl = gsap.timeline({delay: .3})
+  transitionEntranceTl.to($(".triangleGroup"), {
     attr: { transform: "translate(0, 0)" },
-    duration: 1.5,
-    // delay: 0.3,
+    duration: 20,
     ease: "power1.inOut",
     onStart: () => {
       gsap.set(".transition_wrapper", { display: "block" });
     },
     onComplete: () => {
       gsap.set($(".transition_wrapper"), { display: "none" });
-      gsap.set($(".triangleGroup"), {attr: { transform: "translate(-300, -300)" },})
+      gsap.set($(".triangleGroup"), {attr: { transform: "translate(-208, -208)" },})
     },
   });
+
+  transitionEntranceTl.to(".transition_board-group", {
+    duration: 20,
+    ease: "power1.inOut",
+    x: 200, // Ajuster en fonction de la position initiale
+    y: 200 // Ajuster en fonction de la position initiale
+}, "<");
+  
 }
 
 export function transitionExit(destination) {
