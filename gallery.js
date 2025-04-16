@@ -9,9 +9,9 @@ import {
   enableScroll,
   setParallax,
   setButtonHover,
-  transitionEntrance,
-  transitionExit,
-  setTransitionDimension,
+  // transitionEntrance,
+  // transitionExit,
+  // setTransitionDimension,
   setPageTransition
 } from "./utils.js";
 
