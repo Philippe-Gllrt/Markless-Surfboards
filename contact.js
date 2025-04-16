@@ -2,9 +2,7 @@ import {
   setNavBarMenu,
   sectBarCodeMovement,
   updateClock,
-  transitionEntrance,
-  transitionExit,
-  setTransitionDimension,
+ 
   setPageTransition,
   setFooterAppear,
   scrollToTopInstant,

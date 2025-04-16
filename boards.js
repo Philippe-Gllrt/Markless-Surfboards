@@ -11,9 +11,6 @@ import {
   setButtonHover,
   setImageOnScroll,
   setTextOnScroll,
-  transitionEntrance,
-  transitionExit,
-  setTransitionDimension,
   setPageTransition
 } from "./utils.js";
 
