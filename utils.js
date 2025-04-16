@@ -258,7 +258,7 @@ export function setButtonHover() {
         opacity: 1,
         scale: 1,
         duration: 0.3,
-      })
+      });
     });
 
     $btn.on("mouseenter", function () {
@@ -268,10 +268,10 @@ export function setButtonHover() {
       });
 
       gsap.to($text, {
-        opacity: .8,
-        scale: .95,
+        opacity: 0.8,
+        scale: 0.95,
         duration: 0.3,
-      })
+      });
     });
   });
 }
@@ -358,76 +358,75 @@ export function setTextOnScroll() {
 }
 
 export function transitionEntrance() {
-  const angleBoard = Math.round(90 - (Math.atan($(window).height() / $(window).width()) * 180 / Math.PI));
+  const angleBoard = 45;
 
-  console.log(angleBoard)
-  // gsap.set(".transition_board-ellipse", {
-  //   transformOrigin: "center", // Définir le point d'origine de la transformation
-  //   transformBox: "fill-box",  // Utiliser la boîte de remplissage comme référence
-  //   rotation: angleBoard,      // Appliquer la rotation
-  // });
   gsap.set(".transition_board-ellipse", {
-    // transform: `translate(-8, -4) rotate(${angleBoard}, 0, 0)`,
-    attr: { transform: `translate(-8, -4) rotate(${angleBoard}, 0, 0)` }
-    // rotation: angleBoard,      // Appliquer la rotation
+    attr: { transform: `rotate(${angleBoard}, 0, 0)` },
   });
-  
 
+  gsap.set(".transition_board-group", {
+    attr: { transform: `translate(-14, -14)` },
+  });
 
-  let transitionEntranceTl = gsap.timeline({delay: .3})
+  let transitionEntranceTl = gsap.timeline({ delay: 0.3 });
   transitionEntranceTl.to($(".triangleGroup"), {
     attr: { transform: "translate(0, 0)" },
-    duration: 20,
+    duration:1,
     ease: "power1.inOut",
     onStart: () => {
       gsap.set(".transition_wrapper", { display: "block" });
     },
     onComplete: () => {
       gsap.set($(".transition_wrapper"), { display: "none" });
-      gsap.set($(".triangleGroup"), {attr: { transform: "translate(-208, -208)" },})
+      gsap.set($(".triangleGroup"), {
+        attr: { transform: "translate(-1.50, -200)" },
+      });
     },
   });
 
-  transitionEntranceTl.to(".transition_board-group", {
-    duration: 20,
-    ease: "power1.inOut",
-    x: 200, // Ajuster en fonction de la position initiale
-    y: 200 // Ajuster en fonction de la position initiale
-}, "<");
-  
+  transitionEntranceTl.to(
+    ".transition_board-group",
+    {
+      duration:1,
+      ease: "power1.inOut",
+      x: 200, // Ajuster en fonction de la position initiale
+      y: 200, // Ajuster en fonction de la position initiale
+    },
+    "<"
+  );
 }
 
 export function transitionExit(destination) {
   const pageTransitionTl = gsap.timeline();
-      const transtionDuration = 0.2;
-      gsap.set(".transition_panel-svg", {
-        clipPath: "polygon(0 100%, 100% 100%, 100% 100%, 0 100%)",
-      });
+  const transtionDuration = 0.2;
+  gsap.set(".transition_panel-svg", {
+    clipPath: "polygon(0 100%, 100% 100%, 100% 100%, 0 100%)",
+  });
 
-      pageTransitionTl.to(".transition_panel-svg", {
-        clipPath: "polygon(0 56%, 100% 44%, 100% 100%, 0% 100%)",
-        duration: transtionDuration,
-        stagger: 0.05,
-        ease: "power1.in",
-        onStart: () => {
-          gsap.set(".transition_wrapper", { display: "block" });
-        },
-      });
+  pageTransitionTl.to(".transition_panel-svg", {
+    clipPath: "polygon(0 56%, 100% 44%, 100% 100%, 0% 100%)",
+    duration: transtionDuration,
+    stagger: 0.05,
+    ease: "power1.in",
+    onStart: () => {
+      gsap.set(".transition_wrapper", { display: "block" });
+    },
+  });
 
-      pageTransitionTl.to(
-        ".transition_panel-svg",
-        {
-          clipPath: "polygon(0 0%, 100% 0%, 100% 100%, 0 100%)",
-          duration: transtionDuration,
-          delay: transtionDuration,
-          stagger: 0.05,
-          ease: "power1.out",
-          onComplete: () => {
-            window.location = destination;
-          },
-        },
-        "<"
-      );
+  pageTransitionTl.to(
+    ".transition_panel-svg",
+    {
+      clipPath: "polygon(0 0%, 100% 0%, 100% 100%, 0 100%)",
+      duration: transtionDuration,
+      delay: transtionDuration,
+      stagger: 0.05,
+      ease: "power1.out",
+      onComplete: () => {
+        window.location = destination;
+      },
+    },
+    "<"
+  );
 }
 
 export function setTransitionDimension() {
@@ -460,8 +459,6 @@ export function setTransitionDimension() {
   );
 }
 
-
-
 export function setPageTransition() {
   setTransitionDimension();
   // Code that runs on pageload
@@ -487,7 +484,6 @@ export function setPageTransition() {
       let destination = $(this).attr("href");
 
       transitionExit(destination);
-      
     }
   });
 }
