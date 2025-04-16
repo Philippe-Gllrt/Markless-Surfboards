@@ -394,9 +394,9 @@ export function transitionEntrance() {
     attr: { transform: `rotate(${angleBoard}, 0, 0)` },
   });
 
-  gsap.set(".transition_board-group", {
-    attr: { transform: `translate(-14, -14)` },
-  });
+  // gsap.set(".transition_board-group", {
+  //   attr: { transform: `translate(-14, -14)` },
+  // });
 
   let transitionEntranceTl = gsap.timeline({ delay: 0.3 });
   transitionEntranceTl.to($(".triangleGroup"), {

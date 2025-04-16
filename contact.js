@@ -96,7 +96,6 @@ function setContactHover() {
 
     if (filteredElements.length > 0) {
       let $cell = $(filteredElements[0]);
-      console.log($cell)
       const cellOffset = $cell.offset(); // Position de la cellule dans le document
       const cellWidth = $cell.outerWidth(); // Largeur de la cellule
       const cellHeight = $cell.outerHeight(); // Hauteur de la cellule
