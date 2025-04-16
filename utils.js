@@ -357,6 +357,36 @@ export function setTextOnScroll() {
   });
 }
 
+export function setTransitionDimension() {
+  //Abritrary choice. bigger t is, thinner and longer is the triangle
+  const t = 2;
+
+  const u = 1.5;
+
+  //setting screen size
+  const x = 100;
+  const y = 100;
+
+  // Compute point A (summit)
+  const Ax = t * x;
+  const Ay = -t * y;
+
+  // s is the parametter defining the triangle
+  const s = y / (2 - 1 / t);
+
+  // compute rest of points
+  const Bx = s;
+  const By = s;
+  const Cx = -s;
+  const Cy = -s;
+
+  $($("polygon")[0]).attr("points", `${Ax},${-Ay} ${Bx},${-By} ${Cx},${-Cy}`);
+  $($("polygon")[1]).attr(
+    "points",
+    `${Ax},${-Ay} ${Bx * u},${-By * u} ${Cx * u},${-Cy * u}`
+  );
+}
+
 export function transitionEntrance() {
   const angleBoard = 45;
 
@@ -426,36 +456,6 @@ export function transitionExit(destination) {
       },
     },
     "<"
-  );
-}
-
-export function setTransitionDimension() {
-  //Abritrary choice. bigger t is, thinner and longer is the triangle
-  const t = 2;
-
-  const u = 1.5;
-
-  //setting screen size
-  const x = 100;
-  const y = 100;
-
-  // Compute point A (summit)
-  const Ax = t * x;
-  const Ay = -t * y;
-
-  // s is the parametter defining the triangle
-  const s = y / (2 - 1 / t);
-
-  // compute rest of points
-  const Bx = s;
-  const By = s;
-  const Cx = -s;
-  const Cy = -s;
-
-  $($("polygon")[0]).attr("points", `${Ax},${-Ay} ${Bx},${-By} ${Cx},${-Cy}`);
-  $($("polygon")[1]).attr(
-    "points",
-    `${Ax},${-Ay} ${Bx * u},${-By * u} ${Cx * u},${-Cy * u}`
   );
 }
 
