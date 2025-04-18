@@ -11,7 +11,8 @@ import {
   setButtonHover,
   setImageOnScroll,
   setTextOnScroll,
-  setPageTransition
+  setPageTransition,
+  setFooterScrollTop
 } from "./utils.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -22,6 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 window.addEventListener("load", () => {
   setInterval(updateClock, 1000);
+  setFooterScrollTop();
   updateClock();
   setNavBarMenu();
   sectBarCodeMovement();

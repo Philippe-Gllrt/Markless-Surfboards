@@ -12,6 +12,7 @@ import {
   setPageTransition,
   setImageOnScroll,
   setTextOnScroll,
+  setFooterScrollTop
 } from "./utils.js";
 
 
@@ -36,7 +37,7 @@ window.addEventListener("load", () => {
   setInterval(updateClock, 1000);
   updateClock();
   if (sessionStorage.getItem("visited") !== "true") {EntranceAnimation();}
-  
+  setFooterScrollTop();
   setNavBarMenu();
   setIntroLottie();
   setFooterLottie();

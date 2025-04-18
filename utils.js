@@ -5,9 +5,15 @@ export function scrollToTopInstant() {
 
 //function to scroll back to top
 export function scrollToTop() {
+  console.log("scroll")
   gsap.to(window, { scrollTo: 0, duration: 1, ease: "power2.out" });
 }
 
+export function setFooterScrollTop() {
+  $(".footer_scrolltop_link").on("click", ()=>{
+    scrollToTop();
+  });
+}
 // function to make to clock working
 export function updateClock() {
   const options = {
@@ -167,10 +173,13 @@ export function setNavBarMenu() {
     "<"
   );
 
+  $(".nav_menu_link-main p").css("padding", "0px 1px 0px 1px")
+
   $(".nav_button").click(function () {
     if (!isOpen) {
       navOpenTl.play();
       isOpen = true;
+      disableScroll();
     }
   });
 
@@ -178,6 +187,7 @@ export function setNavBarMenu() {
     if (isOpen == true) {
       navOpenTl.reverse();
       isOpen = false;
+      enableScroll()
     }
   });
 }
@@ -393,10 +403,6 @@ export function transitionEntrance() {
   gsap.set(".transition_board-ellipse", {
     attr: { transform: `rotate(${angleBoard}, 0, 0)` },
   });
-
-  // gsap.set(".transition_board-group", {
-  //   attr: { transform: `translate(-14, -14)` },
-  // });
 
   let transitionEntranceTl = gsap.timeline({ delay: 0.3 });
   transitionEntranceTl.to($(".triangleGroup"), {

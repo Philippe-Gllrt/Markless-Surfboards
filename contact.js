@@ -2,7 +2,7 @@ import {
   setNavBarMenu,
   sectBarCodeMovement,
   updateClock,
- 
+  setFooterScrollTop,
   setPageTransition,
   setFooterAppear,
   scrollToTopInstant,
@@ -30,7 +30,7 @@ window.addEventListener("load", () => {
   updateClock();
   setNavBarMenu();
   sectBarCodeMovement();
-  // setFooterAppear();
+  setFooterScrollTop();
   setContactHover();
 });
 

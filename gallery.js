@@ -125,6 +125,9 @@ function galleryWaveAnimation() {
     duration: 0.5,
     ease: "power1.out",
     stagger: 0.07,
+    onComplete: () => {
+      $(".gallery-gallery_container-cover").css("display", "none");
+    }
   });
 
   waveTl.from(
@@ -141,6 +144,9 @@ function galleryWaveAnimation() {
   waveTl.to(
     ".gallery-gallery_item-wrapper",
     {
+      onStart: () => {
+        $(".gallery-gallery_container-cover").css("display", "block");
+      },
       clipPath: "inset(0 0 100% 0)",
       duration: 0.5,
       ease: "power1.out",
