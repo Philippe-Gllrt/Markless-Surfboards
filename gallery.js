@@ -9,7 +9,8 @@ import {
   enableScroll,
   setParallax,
   setButtonHover,
-  setPageTransition
+  setPageTransition,
+  setLenis,
 } from "./utils.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -20,6 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 window.addEventListener("load", () => {
   $(".gallery-gallery_container-cover").css("display", "block");
+  setLenis();
   setInterval(updateClock, 1000);
   updateClock();
   setNavBarMenu();

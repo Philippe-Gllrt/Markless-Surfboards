@@ -4,6 +4,7 @@ import {
   updateClock,
   setFooterScrollTop,
   setPageTransition,
+  setLenis,
   setFooterAppear,
   scrollToTopInstant,
   scrollToTop,
@@ -25,6 +26,7 @@ let typeSplit = new SplitType("[text-split]", {
 });
 
 window.addEventListener("load", () => {
+  setLenis();
   setPageTransition();
   setInterval(updateClock, 1000);
   updateClock();

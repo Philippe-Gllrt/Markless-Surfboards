@@ -12,7 +12,8 @@ import {
   setPageTransition,
   setImageOnScroll,
   setTextOnScroll,
-  setFooterScrollTop
+  setFooterScrollTop,
+  setLenis,
 } from "./utils.js";
 
 
@@ -36,6 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
 window.addEventListener("load", () => {
   setInterval(updateClock, 1000);
   updateClock();
+  setLenis();
   if (sessionStorage.getItem("visited") !== "true") {EntranceAnimation();}
   setFooterScrollTop();
   setNavBarMenu();
@@ -55,17 +57,6 @@ window.addEventListener("load", () => {
   setTimeout(setPageTransition, 500)
 });
 
-const lenis = new Lenis({
-  // Value between 0 and 1, smaller more fluid
-  lerp: 0.05,
-  wheelMultiplier: 1,
-});
-
-function raf(time) {
-  lenis.raf(time);
-  requestAnimationFrame(raf);
-}
-requestAnimationFrame(raf);
 
 // seting original state before animation
 function setPreloaderInitalState() {

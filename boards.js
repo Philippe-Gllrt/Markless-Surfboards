@@ -12,7 +12,8 @@ import {
   setImageOnScroll,
   setTextOnScroll,
   setPageTransition,
-  setFooterScrollTop
+  setFooterScrollTop,
+  setLenis,
 } from "./utils.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -22,6 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 window.addEventListener("load", () => {
+  setLenis();
   setInterval(updateClock, 1000);
   setFooterScrollTop();
   updateClock();

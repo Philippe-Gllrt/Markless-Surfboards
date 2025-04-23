@@ -1,3 +1,17 @@
+export function setLenis() {
+  const lenis = new Lenis({
+    // Value between 0 and 1, smaller more fluid
+    lerp: 0.05,
+    wheelMultiplier: 1,
+  });
+  
+  function raf(time) {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+  }
+  requestAnimationFrame(raf);
+}
+
 //function to scroll back to top
 export function scrollToTopInstant() {
   gsap.to(window, { scrollTo: { y: 0 } });
@@ -474,6 +488,7 @@ export function setPageTransition() {
     sessionStorage.getItem("visited") === "true"
   ) {
     transitionEntrance();
+    sessionStorage.setItem("visited", "true");
   } else if (sessionStorage.getItem("visited") !== "true") {
     sessionStorage.setItem("visited", "true");
   }
