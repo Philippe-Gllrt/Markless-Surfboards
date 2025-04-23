@@ -281,7 +281,7 @@ function setGalleryClick() {
 
     tl.to($imageContainer, {
       clipPath: "inset(100% 0 0 0)",
-      duration: 0.3,
+      duration: 0.5,
       ease: "power1.out",
     });
 
@@ -289,14 +289,14 @@ function setGalleryClick() {
       $modal,
       {
         opacity: 0,
-        duration: 0.4,
+        duration: 0.5,
         ease: "power1.out",
       },
     );
 
     tl.to($(".active"), {
       clipPath: "inset(0% 0 0 0)",
-      duration: 0.5,
+      duration: 0.4,
       ease: "power1.out",
       onComplete: () => {$(".active").removeClass("active"); waveTl.play()}
     }, "<");
