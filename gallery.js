@@ -19,11 +19,11 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 window.addEventListener("load", () => {
+  $(".gallery-gallery_container-cover").css("display", "block");
   setInterval(updateClock, 1000);
   updateClock();
   setNavBarMenu();
   sectBarCodeMovement();
-  // setInterval(galleryBehavior, 7000);
   galleryBehavior();
   setButtonHover();
   if ($(window).width() >= 991) { setGalleryHover() };
