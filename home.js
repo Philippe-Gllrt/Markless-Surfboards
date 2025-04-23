@@ -273,7 +273,7 @@ function setIntroLottie() {
     renderer: "svg",
     loop: false, // or false if you don't want it to loop
     autoplay: false, // Disable autoplay
-    path: "https://cdn.prod.website-files.com/67939e9483ef1b9e88e964c0/67a3abaf4e23619f5632ed13_7c2d8261d61afb62b7b64196a22be566_markless---lottie-logo-animation.json",
+    path: "https://cdn.prod.website-files.com/67939e9483ef1b9e88e964c0/67a3abaf4e23619f5632ed13_51c4f712edb2397350bc401f90277c1e_markless---lottie-logo-animation.json",
   });
 
   ScrollTrigger.create({
@@ -293,7 +293,7 @@ function setFooterLottie() {
     renderer: "svg",
     loop: false, // or false if you don't want it to loop
     autoplay: false, // Disable autoplay
-    path: "https://cdn.prod.website-files.com/67939e9483ef1b9e88e964c0/67a3abaf4e23619f5632ed13_7c2d8261d61afb62b7b64196a22be566_markless---lottie-logo-animation.json",
+    path: "https://cdn.prod.website-files.com/67939e9483ef1b9e88e964c0/67a3abaf4e23619f5632ed13_51c4f712edb2397350bc401f90277c1e_markless---lottie-logo-animation.json",
   });
 
   ScrollTrigger.create({
