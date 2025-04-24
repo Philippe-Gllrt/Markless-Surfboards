@@ -62,22 +62,21 @@ function setCardsBehavior() {
     $track.length === 0 ||
     $cardsList.length === 0
   ) {
-    console.error("Un des éléments nécessaires est introuvable !");
+    console.error("one of the elements cannot be found!");
     return;
   }
 
   const cardWidth = $cardsList.first().outerWidth(true);
   const totalWidth = cardWidth * $cardsList.length;
 
-  // Clone les cards pour effet infini
+  // Clone twice to ensure covering all screen
   $track.append($cardsList.clone());
   $track.append($cardsList.clone());
-  $cardsList = $(".boards-model_cards"); // Re-sélectionner avec les clones
-  $track.width(totalWidth * 2);
+  $cardsList = $(".boards-model_cards"); // Re-select, including clones this time
 
   const draggable = Draggable.create($track[0], {
     type: "x",
-    bounds: { minX: -totalWidth, maxX: 0 },
+    // bounds: { minX: -totalWidth, maxX: 0 },
     inertia: true,
     onDrag: () => {
       checkLoop();
@@ -112,6 +111,7 @@ function setCardsBehavior() {
     let closestCard = null;
     let closestDistance = Infinity;
 
+    //define the closest card
     $cards.each(function () {
       const $card = $(this);
       const cardOffset = $card.offset().left;
@@ -128,7 +128,7 @@ function setCardsBehavior() {
     $cards.each(function () {
       const track = $(this).find(".boards_model_title-track");
       const text = $(this).find(".boards-model_card-title");
-      if (this === closestCard[0]) {
+      if ($(this).attr("card-model") === closestCard.attr("card-model")) {
         gsap.to(this, { scale: 1, duration: 0.3 });
       } else {
         gsap.to(this, {
@@ -167,7 +167,7 @@ function activeCardMarkee() {
     const text = $(this).find(".boards-model_card-title");
     const container = $(this).find(".boards_model_title-container");
 
-    if (this === closestCard[0] && !$(this).hasClass("marquee-active")) {
+    if ($(this).attr("card-model") === closestCard.attr("card-model")) {
       gsap.set(container, { display: "flex" });
       gsap.to(text, {
         opacity: 1,
@@ -180,13 +180,12 @@ function activeCardMarkee() {
         duration: 3,
       });
 
-      $(this).addClass("marquee-active");
       refreshInfo(
         index %
           $($(".boards-models_info-list")[0]).find(".boards-model_info-item")
             .length
       );
-    } else if (this != closestCard[0] && $(this).hasClass("marquee-active")) {
+    } else {
       gsap.to(text, {
         opacity: 0,
         duration: 0.3,
@@ -194,7 +193,6 @@ function activeCardMarkee() {
           gsap.set(container, { display: "none" });
           gsap.killTweensOf(text);
           gsap.set(text, { xPercent: 0 });
-          $(this).removeClass("marquee-active");
         },
       });
     }
