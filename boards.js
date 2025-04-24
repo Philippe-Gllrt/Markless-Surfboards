@@ -56,6 +56,7 @@ function setCardsBehavior() {
   const $container = $(".boards-model_cards-container");
   const $track = $(".boards-model_cards-track");
   let $cardsList = $(".boards-model_cards");
+  
 
   if (
     $container.length === 0 ||
@@ -68,6 +69,7 @@ function setCardsBehavior() {
 
   const cardWidth = $cardsList.first().outerWidth(true);
   const totalWidth = cardWidth * $cardsList.length;
+  // $track.width(totalWidth * 2);
 
   // Clone twice to ensure covering all screen
   $track.append($cardsList.clone());
@@ -144,9 +146,10 @@ function setCardsBehavior() {
 function activeCardMarkee() {
   const windowCenter = window.outerWidth / 2;
   const $cards = $(".boards-model_card");
-
+  let infoRefreshed = false;
   let closestCard = null;
   let closestDistance = Infinity;
+  
 
   //loop selecting the closest card
   $cards.each(function () {
@@ -166,8 +169,7 @@ function activeCardMarkee() {
     const track = $(this).find(".boards_model_title-track");
     const text = $(this).find(".boards-model_card-title");
     const container = $(this).find(".boards_model_title-container");
-
-    if ($(this).attr("card-model") === closestCard.attr("card-model")) {
+    if ($(this).attr("card-model") === closestCard.attr("card-model") && !($(this).attr("markee-activated") === "true")) {
       gsap.set(container, { display: "flex" });
       gsap.to(text, {
         opacity: 1,
@@ -179,13 +181,21 @@ function activeCardMarkee() {
         ease: "linear",
         duration: 3,
       });
+      $(this).attr("markee-activated", "true");
 
-      refreshInfo(
-        index %
-          $($(".boards-models_info-list")[0]).find(".boards-model_info-item")
-            .length
-      );
-    } else {
+      if (!infoRefreshed){
+
+        refreshInfo(
+          index %
+            $($(".boards-models_info-list")[0]).find(".boards-model_info-item")
+              .length
+        );
+
+        infoRefreshed = true;
+
+      }
+
+    } else if ($(this).attr("card-model") !== closestCard.attr("card-model") && ($(this).attr("markee-activated") === "true")) {
       gsap.to(text, {
         opacity: 0,
         duration: 0.3,
@@ -195,41 +205,46 @@ function activeCardMarkee() {
           gsap.set(text, { xPercent: 0 });
         },
       });
+      $(this).removeAttr("markee-activated")
     }
   });
 }
 
-var targetWrapper = $(".boards-model_info-item")[0];
+let targetWrapper;
+let infoMainTl;
 
 function refreshInfo(index) {
-  const mainTl = gsap.timeline();
+  if(infoMainTl){infoMainTl.kill();}
+  infoMainTl = gsap.timeline();
 
-  mainTl.to(
+  //hide the previous active card's related infos
+  
+  infoMainTl.to(
     $(targetWrapper).find(".char"),
     {
       yPercent: 120,
       stagger: { amount: 0.5 },
       duration: 0.3,
       onComplete: () => {
+        //ensure all infos are hidden
         gsap.set($(".boards-model_info-item").find(".char"), { yPercent: 120 });
       },
     },
     "<"
   );
 
-  // const textsTl = gsap.timeline()
+  //select new active acreds infos
   targetWrapper = $(".boards-model_info-item")[index];
 
-  // gsap.killTweensOf($(targetWrapper).find(".char"))
-  mainTl.to($(targetWrapper).find(".char"), {
+  infoMainTl.to($(targetWrapper).find(".char"), {
     yPercent: 0,
     stagger: { amount: 0.5 },
     duration: 0.3,
   });
 
   $(".boards-model_info-item").each(function () {
-    const textTl = gsap.timeline();
-    textTl.to(
+    const lineTl = gsap.timeline();
+    lineTl.to(
       $(this).find(".horizontal-line"),
       {
         scaleX: 0,
@@ -239,7 +254,7 @@ function refreshInfo(index) {
       "<"
     );
 
-    textTl.to(
+    lineTl.to(
       $(this).find(".horizontal-line"),
       {
         scaleX: 1,
