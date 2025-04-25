@@ -14,6 +14,7 @@ import {
   setTextOnScroll,
   setFooterScrollTop,
   setLenis,
+  //cookieConsentHandler,
 } from "./utils.js";
 
 
@@ -35,6 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 window.addEventListener("load", () => {
+  cookieConsentHandler();
   setInterval(updateClock, 1000);
   updateClock();
   setLenis();
@@ -339,13 +341,13 @@ function setProcessFadingText() {
 }
 
 function setBoardsScrollAnimation() {
-  let images = $(".home-boards_background-picture").toArray();
+  let images = $(".home-boards_list-background").toArray();
   images.shift();
 
   let maintl = gsap.timeline({
     scrollTrigger: {
       trigger: ".home-boards_section",
-      start: "top top",
+      start: "top -5%",
       end: "bottom bottom",
       scrub: true,
       ease: "linear",
@@ -379,14 +381,14 @@ function setBoardsScrollAnimation() {
     maintl.add(tl, ">");
   });
 
-  let boardCards = $(".home-boards_card").toArray();
+  let boardCards = $(".home-boards_list-item").toArray();
   let boardCardsShifted = boardCards.slice(1);
   let boardCardsPoped = boardCards.slice(0, -1);
 
   let boardTl = gsap.timeline({
     scrollTrigger: {
       trigger: ".home-boards_section",
-      start: "top top",
+      start: "top -5%",
       end: "bottom bottom",
       scrub: true,
       ease: "linear",
@@ -416,12 +418,13 @@ function setBoardsScrollAnimation() {
   }
 
   let imageSeparators = $(
-    ".home-boards_background-picture-whitesperator"
+    ".home-boards_list-white-panel"
   ).toArray();
+  imageSeparators.shift();
   let separatortl = gsap.timeline({
     scrollTrigger: {
       trigger: ".home-boards_section",
-      start: "top top",
+      start: "top -5%",
       end: "bottom bottom",
       scrub: true,
       ease: "linear",
@@ -454,6 +457,26 @@ function setBoardsScrollAnimation() {
 
     separatortl.add(tl, ">");
   });
+
+  let ctas = $(".boards_cta").toArray();
+  ctas.shift();
+  let ctaTl = gsap.timeline({
+    scrollTrigger: {
+      trigger: ".home-boards_section",
+      start: "top -5%",
+      end: "bottom bottom",
+      scrub: true,
+      ease: "linear",
+    },
+  });
+
+  ctas.forEach((cta)=>{
+    ctaTl.from(cta, {
+      opacity: 0,
+      duration: .5,
+    }, "+=1")
+  })
+
 }
 
 function setSectionHeaderAppear() {
@@ -531,3 +554,60 @@ function setProcessHover() {
     });
   });
 }
+
+function cookieConsentHandler() {
+  // check is user already accepted cookies
+  const cookieConsent = localStorage.getItem('cookieConsent');
+  if (cookieConsent === 'rejected') {
+    $(".cookie_rejected").css("display", "flex")
+    gsap.set($(".cookie_default").find(".char"), {y: 120})
+  } else if (cookieConsent === 'accepted') {
+    $(".cookie_accepted").css("display", "flex")
+    gsap.set($(".cookie_default").find(".char"), {y: 120})
+      //initializeGoogleAnalytics();
+  }
+
+  $('.cookie_accept').click(function() {
+      localStorage.setItem('cookieConsent', 'accepted');
+      //initializeGoogleAnalytics();
+
+      const tl = gsap.timeline();
+      tl.to($(".cookie_default").find(".char"), {
+        yPercent: 120,
+        stagger: 0.002,
+        duration: 0.35,
+        onComplete: () => {$(".cookie_accepted").css("display", "flex")}
+      });
+      tl.from($(".cookie_accepted").find(".char"), {
+        yPercent: 120,
+        stagger: 0.002,
+        duration: 0.35,
+      })
+
+  });
+
+  $('.cookie_deny').click(function() {
+      localStorage.setItem('cookieConsent', 'rejected');
+      // disable Google Analytics
+      //window['ga-disable-UA-XXXXXXXXX-X'] = true;
+
+      const tl = gsap.timeline();
+      tl.to($(".cookie_default").find(".char"), {
+        yPercent: 120,
+        stagger: 0.002,
+        duration: 0.35,
+        onComplete: () => {$(".cookie_rejected").css("display", "flex")}
+      });
+      tl.from($(".cookie_rejected").find(".char"), {
+        yPercent: 120,
+        stagger: 0.002,
+        duration: 0.35,
+      })
+      
+  });
+
+  // function initializing Google Analytics
+  // function initializeGoogleAnalytics() {
+  //     gtag('config', 'UA-XXXXXXXXX-X');
+  // }
+};
