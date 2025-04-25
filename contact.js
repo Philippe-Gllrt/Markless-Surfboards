@@ -26,6 +26,7 @@ let typeSplit = new SplitType("[text-split]", {
 });
 
 window.addEventListener("load", () => {
+  setContactButtonHover();
   setLenis();
   setPageTransition();
   setInterval(updateClock, 1000);
@@ -121,4 +122,27 @@ function setContactHover() {
 
     }
   });
+}
+
+function setContactButtonHover() {
+  $(".button").each(function () {
+    const $btn = $(this).find(".button_second-row");
+    const $text = $btn.find(".heading-style-h2");
+
+    $btn.on("mouseleave", function () {
+      gsap.to($text, {
+        opacity: 1,
+        scale: 1,
+        duration: 0.3,
+      });
+    });
+
+    $btn.on("mouseenter", function () {
+      gsap.to($text, {
+        opacity: 0.8,
+        scale: 0.95,
+        duration: 0.3,
+      });
+    });
+  })
 }
