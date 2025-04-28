@@ -19,11 +19,11 @@ import {
 
 
 if (sessionStorage.getItem("visited") !== "true") {
-//cache le rose
-$('.transition_wrapper').css("display", "none")
-} else {
-  $('.preloader_wrapper').css("display", "none")
-}
+  //cache le rose
+  $('.transition_wrapper').css("display", "none")
+  } else {
+    $('.preloader_wrapper').css("display", "none")
+  }
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -120,7 +120,7 @@ function createReflectLines() {
     line.setAttribute("y1", "100");
     line.setAttribute("x2", "200");
     line.setAttribute("y2", "100");
-    line.setAttribute("stroke", "#fff");
+    line.setAttribute("stroke", "var(--base-color-brand--pink)");
     line.setAttribute("stroke-width", "4");
     svg.appendChild(line);
 

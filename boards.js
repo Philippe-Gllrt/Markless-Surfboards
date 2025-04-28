@@ -71,7 +71,8 @@ function setCardsBehavior() {
   const totalWidth = cardWidth * $cardsList.length;
   // $track.width(totalWidth * 2);
 
-  // Clone twice to ensure covering all screen
+  // Clone three to ensure covering all screen
+  $track.append($cardsList.clone());
   $track.append($cardsList.clone());
   $track.append($cardsList.clone());
   $cardsList = $(".boards-model_cards"); // Re-select, including clones this time
