@@ -237,6 +237,7 @@ function setGalleryClick() {
 
   $(".gallery-gallery_item").each(function () {
     $(this).on("click", function () {
+      $(".gallery-gallery_container-cover").css("display", "block");
       const src = $(this).attr("src");
       $image.attr("src", src);
       $(this).addClass("active")
@@ -272,6 +273,7 @@ function setGalleryClick() {
         clipPath: "inset(0% 0 0 0)",
         duration: 0.5,
         ease: "power1.out",
+        onComplete:()=>{$(".gallery-gallery_container-cover").css("display", "none");}
       });
     });
   });//end each loop
