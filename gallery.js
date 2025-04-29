@@ -61,6 +61,7 @@ const formats = [
   "1/1",
 ];
 let formatsReplicate = formats.slice();
+let isAnimating = false;
 
 function galleryBehavior() {
   $(".gallery-gallery_pictures-wrapper").empty();
@@ -237,6 +238,8 @@ function setGalleryClick() {
 
   $(".gallery-gallery_item").each(function () {
     $(this).on("click", function () {
+      if(isAnimating){return};
+      isAnimating = true;
       $(".gallery-gallery_container-cover").css("display", "block");
       const src = $(this).attr("src");
       $image.attr("src", src);
@@ -273,13 +276,15 @@ function setGalleryClick() {
         clipPath: "inset(0% 0 0 0)",
         duration: 0.5,
         ease: "power1.out",
-        onComplete:()=>{$(".gallery-gallery_container-cover").css("display", "none");}
+        onComplete:()=>{$(".gallery-gallery_container-cover").css("display", "none"); isAnimating = false;}
       });
     });
   });//end each loop
 
   $modal.on("click", ()=>{
     let tl = gsap.timeline();
+    if(isAnimating){return}
+    isAnimating = true,
 
     tl.to($imageContainer, {
       clipPath: "inset(100% 0 0 0)",
@@ -300,9 +305,8 @@ function setGalleryClick() {
       clipPath: "inset(0% 0 0 0)",
       duration: 0.4,
       ease: "power1.out",
-      onComplete: () => {$(".active").removeClass("active"); waveTl.play()}
+      onComplete: () => {$(".active").removeClass("active"); waveTl.play(); isAnimating = false;}
     }, "<");
     tl.set($modal, { display: "none" });
-
   });
 }
