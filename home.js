@@ -17,20 +17,19 @@ import {
   //cookieConsentHandler,
 } from "./utils.js";
 
-if (sessionStorage.getItem("visited") !== "true") {
-  //cache le rose
-  $(".transition_wrapper").css("display", "none");
-} else {
-  $(".preloader_wrapper").css("display", "none");
-}
+
 
 document.addEventListener("DOMContentLoaded", () => {
   //setPreloaderInitalState();
   gsap.registerPlugin(ScrollTrigger);
   gsap.registerPlugin(ScrollToPlugin);
   if (sessionStorage.getItem("visited") !== "true") {
+    $(".transition_wrapper").css("display", "none");
     disableScroll();
-    preloaderAnimation();
+    setTimeout(preloaderAnimation, 500)
+    // preloaderAnimation();
+  } else {
+    $(".preloader_wrapper").css("display", "none");
   }
   scrollToTopInstant();
 });
