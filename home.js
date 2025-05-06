@@ -17,22 +17,22 @@ import {
   //cookieConsentHandler,
 } from "./utils.js";
 
-
 if (sessionStorage.getItem("visited") !== "true") {
   //cache le rose
-  $('.transition_wrapper').css("display", "none")
-  } else {
-    $('.preloader_wrapper').css("display", "none")
-  }
-
+  $(".transition_wrapper").css("display", "none");
+} else {
+  $(".preloader_wrapper").css("display", "none");
+}
 
 document.addEventListener("DOMContentLoaded", () => {
   //setPreloaderInitalState();
   gsap.registerPlugin(ScrollTrigger);
   gsap.registerPlugin(ScrollToPlugin);
-  if (sessionStorage.getItem("visited") !== "true") {disableScroll(); preloaderAnimation();}
+  if (sessionStorage.getItem("visited") !== "true") {
+    disableScroll();
+    preloaderAnimation();
+  }
   scrollToTopInstant();
-  
 });
 
 window.addEventListener("load", () => {
@@ -40,25 +40,32 @@ window.addEventListener("load", () => {
   setInterval(updateClock, 1000);
   updateClock();
   setLenis();
-  if (sessionStorage.getItem("visited") !== "true") {EntranceAnimation();}
+  if (sessionStorage.getItem("visited") !== "true") {
+    EntranceAnimation();
+  }
+  if ($(window).width() > 991) {
+    sectBarCodeMovement();
+    setTimeout(setParallax, 500);
+    setButtonHover();
+    setSectionHeaderAppear();
+    setTextOnScroll();
+    setImageOnScroll();
+    setTimeout(setProcessHover, 500);
+  }
   setFooterScrollTop();
   setNavBarMenu();
   setIntroLottie();
   setFooterLottie();
   setProcessLottie();
-  sectBarCodeMovement();
-  setTimeout(setProcessFadingText, 500);
-  setTimeout(setParallax, 500);
-  setTimeout(setBoardsScrollAnimation, 500);
-  setButtonHover();
-  setSectionHeaderAppear();
-  setTextOnScroll();
-  setImageOnScroll();
-  setTimeout(setFooterAppear, 500);
-  setTimeout(setProcessHover, 500);
-  setTimeout(setPageTransition, 500)
-});
 
+  setTimeout(setProcessFadingText, 500);
+
+  setTimeout(setBoardsScrollAnimation, 500);
+
+  setTimeout(setFooterAppear, 500);
+
+  setTimeout(setPageTransition, 500);
+});
 
 // seting original state before animation
 function setPreloaderInitalState() {
@@ -417,9 +424,7 @@ function setBoardsScrollAnimation() {
     }
   }
 
-  let imageSeparators = $(
-    ".home-boards_list-white-panel"
-  ).toArray();
+  let imageSeparators = $(".home-boards_list-white-panel").toArray();
   imageSeparators.shift();
   let separatortl = gsap.timeline({
     scrollTrigger: {
@@ -470,13 +475,16 @@ function setBoardsScrollAnimation() {
     },
   });
 
-  ctas.forEach((cta)=>{
-    ctaTl.from(cta, {
-      opacity: 0,
-      duration: .5,
-    }, "+=1")
-  })
-
+  ctas.forEach((cta) => {
+    ctaTl.from(
+      cta,
+      {
+        opacity: 0,
+        duration: 0.5,
+      },
+      "+=1"
+    );
+  });
 }
 
 function setSectionHeaderAppear() {
@@ -509,7 +517,6 @@ function setSectionHeaderAppear() {
       "+=0.7";
   });
 }
-
 
 function setProcessHover() {
   const $processSection = $(".home-process_section");
@@ -557,57 +564,59 @@ function setProcessHover() {
 
 function cookieConsentHandler() {
   // check is user already accepted cookies
-  const cookieConsent = localStorage.getItem('cookieConsent');
-  if (cookieConsent === 'rejected') {
-    $(".cookie_rejected").css("display", "flex")
-    gsap.set($(".cookie_default").find(".char"), {y: 120})
-  } else if (cookieConsent === 'accepted') {
-    $(".cookie_accepted").css("display", "flex")
-    gsap.set($(".cookie_default").find(".char"), {y: 120})
-      //initializeGoogleAnalytics();
+  const cookieConsent = localStorage.getItem("cookieConsent");
+  if (cookieConsent === "rejected") {
+    $(".cookie_rejected").css("display", "flex");
+    gsap.set($(".cookie_default").find(".char"), { y: 120 });
+  } else if (cookieConsent === "accepted") {
+    $(".cookie_accepted").css("display", "flex");
+    gsap.set($(".cookie_default").find(".char"), { y: 120 });
+    //initializeGoogleAnalytics();
   }
 
-  $('.cookie_accept').click(function() {
-      localStorage.setItem('cookieConsent', 'accepted');
-      //initializeGoogleAnalytics();
+  $(".cookie_accept").click(function () {
+    localStorage.setItem("cookieConsent", "accepted");
+    //initializeGoogleAnalytics();
 
-      const tl = gsap.timeline();
-      tl.to($(".cookie_default").find(".char"), {
-        yPercent: 120,
-        stagger: 0.002,
-        duration: 0.35,
-        onComplete: () => {$(".cookie_accepted").css("display", "flex")}
-      });
-      tl.from($(".cookie_accepted").find(".char"), {
-        yPercent: 120,
-        stagger: 0.002,
-        duration: 0.35,
-      })
-
+    const tl = gsap.timeline();
+    tl.to($(".cookie_default").find(".char"), {
+      yPercent: 120,
+      stagger: 0.002,
+      duration: 0.35,
+      onComplete: () => {
+        $(".cookie_accepted").css("display", "flex");
+      },
+    });
+    tl.from($(".cookie_accepted").find(".char"), {
+      yPercent: 120,
+      stagger: 0.002,
+      duration: 0.35,
+    });
   });
 
-  $('.cookie_deny').click(function() {
-      localStorage.setItem('cookieConsent', 'rejected');
-      // disable Google Analytics
-      //window['ga-disable-UA-XXXXXXXXX-X'] = true;
+  $(".cookie_deny").click(function () {
+    localStorage.setItem("cookieConsent", "rejected");
+    // disable Google Analytics
+    //window['ga-disable-UA-XXXXXXXXX-X'] = true;
 
-      const tl = gsap.timeline();
-      tl.to($(".cookie_default").find(".char"), {
-        yPercent: 120,
-        stagger: 0.002,
-        duration: 0.35,
-        onComplete: () => {$(".cookie_rejected").css("display", "flex")}
-      });
-      tl.from($(".cookie_rejected").find(".char"), {
-        yPercent: 120,
-        stagger: 0.002,
-        duration: 0.35,
-      })
-      
+    const tl = gsap.timeline();
+    tl.to($(".cookie_default").find(".char"), {
+      yPercent: 120,
+      stagger: 0.002,
+      duration: 0.35,
+      onComplete: () => {
+        $(".cookie_rejected").css("display", "flex");
+      },
+    });
+    tl.from($(".cookie_rejected").find(".char"), {
+      yPercent: 120,
+      stagger: 0.002,
+      duration: 0.35,
+    });
   });
 
   // function initializing Google Analytics
   // function initializeGoogleAnalytics() {
   //     gtag('config', 'UA-XXXXXXXXX-X');
   // }
-};
+}
