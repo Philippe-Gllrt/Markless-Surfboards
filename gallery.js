@@ -21,15 +21,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
 window.addEventListener("load", () => {
   $(".gallery-gallery_container-cover").css("display", "block");
+  if ($(window).width() > 991) { 
+    setGalleryHover();
+    setButtonHover();
+    setImageHover();
+    sectBarCodeMovement();
+  }
   setLenis();
   setInterval(updateClock, 1000);
   updateClock();
   setNavBarMenu();
-  sectBarCodeMovement();
   galleryBehavior();
-  setButtonHover();
-  if ($(window).width() >= 991) { setGalleryHover() };
-  setImageHover();
   setGalleryClick();
 });
 

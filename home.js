@@ -51,6 +51,7 @@ window.addEventListener("load", () => {
     setTextOnScroll();
     setImageOnScroll();
     setTimeout(setProcessHover, 500);
+    setTimeout(setFooterAppear, 500);
   }
   setFooterScrollTop();
   setNavBarMenu();
@@ -62,7 +63,7 @@ window.addEventListener("load", () => {
 
   setTimeout(setBoardsScrollAnimation, 500);
 
-  setTimeout(setFooterAppear, 500);
+  
 
   setTimeout(setPageTransition, 500);
 });

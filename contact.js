@@ -26,15 +26,19 @@ let typeSplit = new SplitType("[text-split]", {
 });
 
 window.addEventListener("load", () => {
-  setContactButtonHover();
+  if ($(window).width() > 991) {
+    setContactButtonHover();
+    sectBarCodeMovement();
+    setContactHover();
+  }
+  
   setLenis();
   setPageTransition();
   setInterval(updateClock, 1000);
   updateClock();
   setNavBarMenu();
-  sectBarCodeMovement();
   setFooterScrollTop();
-  setContactHover();
+  
 });
 
 const lenis = new Lenis({

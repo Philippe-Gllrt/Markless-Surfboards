@@ -23,18 +23,20 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 window.addEventListener("load", () => {
+  if ($(window).width() > 991) {
+    sectBarCodeMovement();
+    setButtonHover();
+    setFooterAppear();
+    setParallax();
+    setImageOnScroll();
+    setTextOnScroll();
+  }
   setLenis();
   setInterval(updateClock, 1000);
   setFooterScrollTop();
   updateClock();
   setNavBarMenu();
-  sectBarCodeMovement();
-  setButtonHover();
-  setFooterAppear();
   setCardsBehavior();
-  setParallax();
-  setImageOnScroll();
-  setTextOnScroll();
   activeCardMarkee();
 });
 
@@ -56,7 +58,6 @@ function setCardsBehavior() {
   const $container = $(".boards-model_cards-container");
   const $track = $(".boards-model_cards-track");
   let $cardsList = $(".boards-model_cards");
-  
 
   if (
     $container.length === 0 ||
@@ -150,7 +151,6 @@ function activeCardMarkee() {
   let infoRefreshed = false;
   let closestCard = null;
   let closestDistance = Infinity;
-  
 
   //loop selecting the closest card
   $cards.each(function () {
@@ -170,7 +170,10 @@ function activeCardMarkee() {
     const track = $(this).find(".boards_model_title-track");
     const text = $(this).find(".boards-model_card-title");
     const container = $(this).find(".boards_model_title-container");
-    if ($(this).attr("card-model") === closestCard.attr("card-model") && !($(this).attr("markee-activated") === "true")) {
+    if (
+      $(this).attr("card-model") === closestCard.attr("card-model") &&
+      !($(this).attr("markee-activated") === "true")
+    ) {
       gsap.set(container, { display: "flex" });
       gsap.to(text, {
         opacity: 1,
@@ -184,8 +187,7 @@ function activeCardMarkee() {
       });
       $(this).attr("markee-activated", "true");
 
-      if (!infoRefreshed){
-
+      if (!infoRefreshed) {
         refreshInfo(
           index %
             $($(".boards-models_info-list")[0]).find(".boards-model_info-item")
@@ -193,10 +195,11 @@ function activeCardMarkee() {
         );
 
         infoRefreshed = true;
-
       }
-
-    } else if ($(this).attr("card-model") !== closestCard.attr("card-model") && ($(this).attr("markee-activated") === "true")) {
+    } else if (
+      $(this).attr("card-model") !== closestCard.attr("card-model") &&
+      $(this).attr("markee-activated") === "true"
+    ) {
       gsap.to(text, {
         opacity: 0,
         duration: 0.3,
@@ -206,7 +209,7 @@ function activeCardMarkee() {
           gsap.set(text, { xPercent: 0 });
         },
       });
-      $(this).removeAttr("markee-activated")
+      $(this).removeAttr("markee-activated");
     }
   });
 }
@@ -215,11 +218,13 @@ let targetWrapper;
 let infoMainTl;
 
 function refreshInfo(index) {
-  if(infoMainTl){infoMainTl.kill();}
+  if (infoMainTl) {
+    infoMainTl.kill();
+  }
   infoMainTl = gsap.timeline();
 
   //hide the previous active card's related infos
-  
+
   infoMainTl.to(
     $(targetWrapper).find(".char"),
     {
@@ -267,4 +272,3 @@ function refreshInfo(index) {
     );
   });
 }
-

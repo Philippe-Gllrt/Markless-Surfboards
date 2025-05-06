@@ -12,7 +12,6 @@ import {
   disableScroll,
   enableScroll,
   setParallax,
- 
 } from "./utils.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -27,12 +26,14 @@ let typeSplit = new SplitType("[text-split]", {
 });
 
 window.addEventListener("load", () => {
+  if ($(window).width() > 991) {
+    setButtonHover();
+    sectBarCodeMovement();
+  }
   setLenis();
   setPageTransition();
   setInterval(updateClock, 1000);
   updateClock();
   setNavBarMenu();
-  sectBarCodeMovement();
   setFooterScrollTop();
-  setButtonHover();
 });
