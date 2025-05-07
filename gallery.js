@@ -11,6 +11,7 @@ import {
   setButtonHover,
   setPageTransition,
   setLenis,
+  setLinkHover,
 } from "./utils.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -24,6 +25,7 @@ window.addEventListener("load", () => {
   if ($(window).width() > 991) { 
     setGalleryHover();
     setButtonHover();
+    setLinkHover();
     setImageHover();
     sectBarCodeMovement();
   }

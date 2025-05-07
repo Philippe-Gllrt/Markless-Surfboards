@@ -14,6 +14,7 @@ import {
   setTextOnScroll,
   setFooterScrollTop,
   setLenis,
+  setLinkHover,
   //cookieConsentHandler,
 } from "./utils.js";
 
@@ -51,19 +52,15 @@ window.addEventListener("load", () => {
     setImageOnScroll();
     setTimeout(setProcessHover, 500);
     setTimeout(setFooterAppear, 500);
+    setLinkHover();
   }
   setFooterScrollTop();
   setNavBarMenu();
   setIntroLottie();
   setFooterLottie();
   setProcessLottie();
-
   setTimeout(setProcessFadingText, 500);
-
   setTimeout(setBoardsScrollAnimation, 500);
-
-  
-
   setTimeout(setPageTransition, 500);
 });
 

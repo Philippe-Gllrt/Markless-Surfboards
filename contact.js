@@ -5,6 +5,7 @@ import {
   setFooterScrollTop,
   setPageTransition,
   setLenis,
+  setLinkHover,
   setFooterAppear,
   scrollToTopInstant,
   scrollToTop,
@@ -30,6 +31,7 @@ window.addEventListener("load", () => {
     setContactButtonHover();
     sectBarCodeMovement();
     setContactHover();
+    setLinkHover()
   }
   
   setLenis();

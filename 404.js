@@ -12,6 +12,7 @@ import {
   disableScroll,
   enableScroll,
   setParallax,
+  setLinkHover,
 } from "./utils.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -29,6 +30,7 @@ window.addEventListener("load", () => {
   if ($(window).width() > 991) {
     setButtonHover();
     sectBarCodeMovement();
+    setLinkHover();
   }
   setLenis();
   setPageTransition();

@@ -514,3 +514,26 @@ export function setPageTransition() {
     }
   }
 }
+
+export function setLinkHover() {
+  $('a').hover(
+    function () {
+      const hoveredLink = this;
+  
+      $('h1, h2, h3, h4, h5, h6, p, span, li, a').each(function () {
+        const el = this;
+        if (el === hoveredLink || hoveredLink.contains(el) || el.contains(hoveredLink)) {
+          return; 
+        }
+        gsap.to(el, { opacity: 0.7, duration: 0.3 });
+      });
+    },
+    function () {
+      gsap.to('h1, h2, h3, h4, h5, h6, p, span, li, a', {
+        opacity: 1,
+        duration: 0.3
+      });
+    }
+  );
+  
+}
