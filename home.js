@@ -17,20 +17,18 @@ import {
   setLinkHover,
   setPatchAppearOnScroll,
   setButtonAppearOnScroll,
-  //cookieConsentHandler,
+  LottieScrollTrigger,
 } from "./utils.js";
 
 
 
 document.addEventListener("DOMContentLoaded", () => {
-  //setPreloaderInitalState();
   gsap.registerPlugin(ScrollTrigger);
   gsap.registerPlugin(ScrollToPlugin);
   if (sessionStorage.getItem("visited") !== "true") {
     $(".transition_wrapper").css("display", "none");
     disableScroll();
     setTimeout(preloaderAnimation, 500)
-    // preloaderAnimation();
   } else {
     $(".preloader_wrapper").css("display", "none");
   }
@@ -42,6 +40,7 @@ window.addEventListener("load", () => {
   setInterval(updateClock, 1000);
   updateClock();
   setLenis();
+  setProcessFade();
   if (sessionStorage.getItem("visited") !== "true") {
     EntranceAnimation();
   }
@@ -66,6 +65,7 @@ window.addEventListener("load", () => {
   setTimeout(setProcessFadingText, 500);
   setTimeout(setBoardsScrollAnimation, 500);
   setTimeout(setPageTransition, 500);
+  setPhilosophyColumnTextHover();
 });
 
 // seting original state before animation
@@ -341,23 +341,37 @@ function setFooterLottie() {
 }
 
 function setProcessLottie() {
-  let animProcess = lottie.loadAnimation({
-    container: document.querySelector(".home-process_lottie"),
-    renderer: "svg",
-    loop: false, // or false if you don't want it to loop
-    autoplay: false, // Disable autoplay
+  
+  // let animProcess = lottie.loadAnimation({
+  //   container: document.querySelector(".home-process_lottie"),
+  //   renderer: "svg",
+  //   loop: false, // or false if you don't want it to loop
+  //   autoplay: false, // Disable autoplay
+  //   path: "https://cdn.prod.website-files.com/67939e9483ef1b9e88e964c0/67a4d1c2bc2edae311b3c99f_be0111218b8d809cb2c82fdaaff50839_markless---schema.json",
+  // });
+
+  // ScrollTrigger.create({
+  //   trigger: $(".home-process_section"),
+  //   start: "10% 20%",
+  //   end: "bottom 80%",
+  //   onEnter: () => animProcess.play(),
+  //   // onLeaveBack: () => animProcess.stop(),
+  //   //toggleActions: "play none none reverse",
+  //   toggleActions: "play none none none",
+  // });
+
+  LottieScrollTrigger({
+    trigger: $(".home-process_section"),
+    target: ".home-process_lottie",
     path: "https://cdn.prod.website-files.com/67939e9483ef1b9e88e964c0/67a4d1c2bc2edae311b3c99f_be0111218b8d809cb2c82fdaaff50839_markless---schema.json",
+    speed: "medium",
+    scrub: true,
+    start: "top top",
+    end: "bottom bottom",
+    pin: false,
+    // markers: true
   });
 
-  ScrollTrigger.create({
-    trigger: $(".home-process_section"),
-    start: "10% 20%",
-    end: "bottom 80%",
-    onEnter: () => animProcess.play(),
-    // onLeaveBack: () => animProcess.stop(),
-    //toggleActions: "play none none reverse",
-    toggleActions: "play none none none",
-  });
 }
 
 function setProcessFadingText() {
@@ -372,8 +386,12 @@ function setProcessFadingText() {
       },
     });
 
-    tl.from($(this), { opacity: 0.2, duration: 0.3 }).to($(this), {
-      opacity: 0.2,
+    tl.from($(this), { 
+      opacity: 0.2, 
+      duration: 0.3 
+    })
+    .to($(this), {
+      opacity: 0,
       duration: 0.3,
       delay: 0.1,
     });
@@ -647,9 +665,69 @@ function cookieConsentHandler() {
       duration: 0.35,
     });
   });
+};
 
-  // function initializing Google Analytics
-  // function initializeGoogleAnalytics() {
-  //     gtag('config', 'UA-XXXXXXXXX-X');
-  // }
+function setProcessFade() {
+
+  $(".home-process_section").addClass("brown-background")
+  const fadeTl = gsap.timeline({
+    scrollTrigger: {
+       trigger: $(".home-process_section"),
+       start: "top 20%",
+       end: "bottom 20%",
+       onEnter: ()=>{
+        $(".home-about_section, .home-philosophy_section, .home-process_section").removeClass("brown-background");
+        $(".home-about_section, .home-philosophy_section, .home-process_section").addClass("pink-background");
+       },
+       onEnterBack: ()=>{
+        $(".home-about_section, .home-philosophy_section, .home-process_section").removeClass("brown-background");
+        $(".home-about_section, .home-philosophy_section, .home-process_section").addClass("pink-background");
+       },
+       onLeave: ()=>{
+        $(".home-about_section, .home-philosophy_section, .home-process_section").removeClass("pink-background");
+        $(".home-about_section, .home-philosophy_section, .home-process_section").addClass("brown-background");
+       },
+       onLeaveBack: ()=>{
+        $(".home-about_section, .home-philosophy_section, .home-process_section").removeClass("pink-background");
+        $(".home-about_section, .home-philosophy_section, .home-process_section").addClass("brown-background");
+       },
+    },
+ });
+};
+
+function setPhilosophyColumnTextHover() {
+  const $items = $('.home-philosophy_column.is-right').find("p");
+
+  $items.each(function(index) {
+    $(this).on("mouseenter", function() {
+      const baseOffset = 40;
+      const decayFactor = 0.7;
+
+      $items.each(function(i) {
+        const distanceFromHovered = Math.abs(i - index);
+        // const direction = i < index ? -1 : 1;
+
+        // L'élément lui-même (distance = 0) se déplace de 80px
+        const offset = baseOffset * Math.pow(decayFactor, distanceFromHovered);
+        gsap.killTweensOf($(this));
+        gsap.to(this, {
+          paddingLeft: offset,
+          duration: 0.4,
+          ease: "power2.out"
+        });
+      });
+    });
+
+    $(this).on("mouseleave", function() {
+      // Tout revient à 0
+      $items.each(function() {
+        gsap.to(this, {
+          paddingLeft: 0,
+          duration: 0.4,
+          ease: "power2.inOut",
+          delay: .5
+        });
+      });
+    });
+  });
 }
