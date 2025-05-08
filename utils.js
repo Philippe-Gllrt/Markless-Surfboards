@@ -241,6 +241,7 @@ export function setParallax() {
 }
 
 export function setButtonHover() {
+  setCursorButton();
   $(".button").each(function () {
     const $btn = $(this).find(".button_second-row");
     const $text = $btn.find(".heading-style-h2");
@@ -299,6 +300,78 @@ export function setButtonHover() {
     });
   });
 }
+
+export function setCursorButton() {
+  $(".button").each(function () {
+    const $btn = $(this).find(".button_second-row");
+
+    // Crée le curseur custom pour ce bouton
+    const $cursor = $("<img>", {
+      class: "custom-cursor",
+      src: "https://cdn.prod.website-files.com/67939e9483ef1b9e88e964c0/681b82d41b534ede8068d9f7_board_icon_transparent.png",
+    }).css({
+      width: "40px",
+      height: "40px",
+      position: "absolute",
+      top: 0,
+      left: 0,
+      opacity: 0,
+      pointerEvents: "none",
+      zIndex: 10,
+      display: "none",
+    });
+
+    // On l'ajoute DANS le bouton directement
+    $btn.css("position", "relative"); // Assure-toi que le parent a position relative
+    $btn.append($cursor);
+
+    $btn.on("mouseenter", function (e) {
+      $("body").css("cursor", "none");
+      $btn.css("cursor", "none");
+      gsap.to($cursor, {
+        opacity: 1,
+        duration: .2
+      });
+
+      // Position initiale du curseur custom
+      const offset = $btn.offset();
+      const x = e.pageX - offset.left;
+      const y = e.pageY - offset.top;
+
+      gsap.set($cursor, {
+        x: x + 2,
+        y: y + 2,
+      });
+
+      $cursor.show();
+    });
+
+    $btn.on("mousemove", function (e) {
+      const offset = $btn.offset();
+      const x = e.pageX - offset.left;
+      const y = e.pageY - offset.top;
+
+      gsap.to($cursor, {
+        x: x + 2,
+        y: y + 2,
+        duration: 0.2,
+        ease: "power2.out",
+      });
+    });
+
+    $btn.on("mouseleave", function () {
+      $("body").css("cursor", "default");
+      $btn.css("cursor", "default");
+      gsap.to($cursor, {
+        opacity: 0,
+        duration: .2,
+        onComplete: () => {$cursor.hide();}
+      });
+    });
+  });
+}
+
+
 
 export function setFooterAppear() {
   let $footer = $(".footer");
@@ -550,7 +623,7 @@ export function setPatchAppearOnScroll() {
         end: "bottom top",
       },
     });
-   
+
     const patchSplitType = window.SplitType;
     let patchTypeSplit = new patchSplitType($(this).find("p"), {
       types: "words, chars",
@@ -564,7 +637,7 @@ export function setPatchAppearOnScroll() {
       ease: "power2.out",
     });
     patchTl.from($(this).find(".horizontal-line"), {
-      scaleX: 0, 
+      scaleX: 0,
       duration: 0.3,
       transformOrigin: "left",
       ease: "power2.out",
@@ -573,7 +646,7 @@ export function setPatchAppearOnScroll() {
     patchTl.from(
       $(this).find(".vertical-line"),
       {
-        scaleY: 0, 
+        scaleY: 0,
         duration: 0.3,
         transformOrigin: "top",
         ease: "power2.out",
@@ -581,29 +654,27 @@ export function setPatchAppearOnScroll() {
       },
       "<"
     );
-    patchTl.from(
-      $(this).find(".char"),
-      {
-        yPercent: 120,
+    patchTl.from($(this).find(".char"), {
+      yPercent: 120,
       stagger: 0.002,
       duration: 0.35,
-      },
-    );
+    });
     patchTl.from(
       $(this).find("img"),
       {
         yPercent: -120,
-      stagger: 0.002,
-      duration: 0.35,
-      }, "<"
+        stagger: 0.002,
+        duration: 0.35,
+      },
+      "<"
     );
   });
 }
 
 export function setPatchAppear() {
   $(".patch").each(function () {
-    const patchTl = gsap.timeline({    });
-   
+    const patchTl = gsap.timeline({});
+
     const patchSplitType = window.SplitType;
     let patchTypeSplit = new patchSplitType($(this).find("p"), {
       types: "words, chars",
@@ -617,7 +688,7 @@ export function setPatchAppear() {
       ease: "power2.out",
     });
     patchTl.from($(this).find(".horizontal-line"), {
-      scaleX: 0, 
+      scaleX: 0,
       duration: 0.3,
       transformOrigin: "left",
       ease: "power2.out",
@@ -626,7 +697,7 @@ export function setPatchAppear() {
     patchTl.from(
       $(this).find(".vertical-line"),
       {
-        scaleY: 0, 
+        scaleY: 0,
         duration: 0.3,
         transformOrigin: "top",
         ease: "power2.out",
@@ -634,34 +705,31 @@ export function setPatchAppear() {
       },
       "<"
     );
-    patchTl.from(
-      $(this).find(".char"),
-      {
-        yPercent: 120,
+    patchTl.from($(this).find(".char"), {
+      yPercent: 120,
       stagger: 0.002,
       duration: 0.35,
-      },
-    );
+    });
     patchTl.from(
       $(this).find("img"),
       {
         yPercent: -120,
-      stagger: 0.002,
-      duration: 0.35,
-      }, "<"
+        stagger: 0.002,
+        duration: 0.35,
+      },
+      "<"
     );
   });
 }
 
 export function setButtonAppearOnScroll() {
-  $(".button").each(function(){
-
+  $(".button").each(function () {
     const buttonTl = gsap.timeline({
       scrollTrigger: {
         trigger: $(this),
         start: "top 70%",
         end: "bottom top",
-      }
+      },
     });
 
     const buttonSplitType = window.SplitType;
@@ -677,32 +745,38 @@ export function setButtonAppearOnScroll() {
       ease: "power2.out",
     });
     buttonTl.from($(this).find(".horizontal-line"), {
-      scaleX: 0, 
+      scaleX: 0,
       duration: 0.5,
       transformOrigin: "left",
       ease: "power2.out",
       stagger: 0.1,
     });
-    buttonTl.from($(this).find(".char"), {
-      yPercent: 120,
-      stagger: 0.002,
-      duration: 0.4,
-    }, "<");
-    buttonTl.from($(this).find(".barcode_contain"), {
-      scaleY: 0, 
-      duration: 0.5,
-      transformOrigin: "bottom",
-      ease: "power2.out",
-      stagger: 0.1,
-    }, "<");
-
+    buttonTl.from(
+      $(this).find(".char"),
+      {
+        yPercent: 120,
+        stagger: 0.002,
+        duration: 0.4,
+      },
+      "<"
+    );
+    buttonTl.from(
+      $(this).find(".barcode_contain"),
+      {
+        scaleY: 0,
+        duration: 0.5,
+        transformOrigin: "bottom",
+        ease: "power2.out",
+        stagger: 0.1,
+      },
+      "<"
+    );
   });
-};
+}
 
 export function setButtonAppear() {
-  $(".button").each(function(){
-
-    const buttonTl = gsap.timeline({    });
+  $(".button").each(function () {
+    const buttonTl = gsap.timeline({});
 
     const buttonSplitType = window.SplitType;
     let buttonTypeSplit = new buttonSplitType($(this).find("p"), {
@@ -717,24 +791,31 @@ export function setButtonAppear() {
       ease: "power2.out",
     });
     buttonTl.from($(this).find(".horizontal-line"), {
-      scaleX: 0, 
+      scaleX: 0,
       duration: 0.5,
       transformOrigin: "left",
       ease: "power2.out",
       stagger: 0.1,
     });
-    buttonTl.from($(this).find(".char"), {
-      yPercent: 120,
-      stagger: 0.002,
-      duration: 0.4,
-    }, "<");
-    buttonTl.from($(this).find(".barcode_contain"), {
-      scaleY: 0, 
-      duration: 0.5,
-      transformOrigin: "bottom",
-      ease: "power2.out",
-      stagger: 0.1,
-    }, "<");
-
+    buttonTl.from(
+      $(this).find(".char"),
+      {
+        yPercent: 120,
+        stagger: 0.002,
+        duration: 0.4,
+      },
+      "<"
+    );
+    buttonTl.from(
+      $(this).find(".barcode_contain"),
+      {
+        scaleY: 0,
+        duration: 0.5,
+        transformOrigin: "bottom",
+        ease: "power2.out",
+        stagger: 0.1,
+      },
+      "<"
+    );
   });
-};
+}
