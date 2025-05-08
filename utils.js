@@ -399,8 +399,7 @@ export function setFooterAppear() {
   tl.from(
     $clock,
     {
-      yPercent: 120,
-      opacity: 0,
+      clipPath: "inset(100% 0 0 0)",
       duration: 0.35,
       delay: 1.2,
     },
