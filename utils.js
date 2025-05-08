@@ -4,7 +4,7 @@ export function setLenis() {
     lerp: 0.05,
     wheelMultiplier: 1,
   });
-  
+
   function raf(time) {
     lenis.raf(time);
     requestAnimationFrame(raf);
@@ -19,12 +19,12 @@ export function scrollToTopInstant() {
 
 //function to scroll back to top
 export function scrollToTop() {
-  console.log("scroll")
+  console.log("scroll");
   gsap.to(window, { scrollTo: 0, duration: 1, ease: "power2.out" });
 }
 
 export function setFooterScrollTop() {
-  $(".footer_scrolltop_link").on("click", ()=>{
+  $(".footer_scrolltop_link").on("click", () => {
     scrollToTop();
   });
 }
@@ -187,7 +187,7 @@ export function setNavBarMenu() {
     "<"
   );
 
-  $(".nav_menu_link-main p").css("padding", "0px 1px 0px 1px")
+  $(".nav_menu_link-main p").css("padding", "0px 1px 0px 1px");
 
   $(".nav_button").click(function () {
     if (!isOpen) {
@@ -201,7 +201,7 @@ export function setNavBarMenu() {
     if (isOpen == true) {
       navOpenTl.reverse();
       isOpen = false;
-      enableScroll()
+      enableScroll();
     }
   });
 }
@@ -421,7 +421,7 @@ export function transitionEntrance() {
   let transitionEntranceTl = gsap.timeline({ delay: 0.3 });
   transitionEntranceTl.to($(".triangleGroup"), {
     attr: { transform: "translate(0, 0)" },
-    duration:1,
+    duration: 1,
     ease: "power1.inOut",
     onStart: () => {
       gsap.set(".transition_wrapper", { display: "block" });
@@ -437,7 +437,7 @@ export function transitionEntrance() {
   transitionEntranceTl.to(
     ".transition_board-group",
     {
-      duration:1,
+      duration: 1,
       ease: "power1.inOut",
       x: 200, // Ajuster en fonction de la position initiale
       y: 200, // Ajuster en fonction de la position initiale
@@ -508,32 +508,233 @@ export function setPageTransition() {
     }
   });
 
-  window.onpageshow = function(event){
-  	if (event.persisted) {
-    	window.location.reload();
+  window.onpageshow = function (event) {
+    if (event.persisted) {
+      window.location.reload();
     }
-  }
+  };
 }
 
 export function setLinkHover() {
-  $('a').hover(
+  $("a").hover(
     function () {
       const hoveredLink = this;
-  
-      $('h1, h2, h3, h4, h5, h6, p, span, li, a').each(function () {
+
+      $("h1, h2, h3, h4, h5, h6, p, span, li, a").each(function () {
         const el = this;
-        if (el === hoveredLink || hoveredLink.contains(el) || el.contains(hoveredLink)) {
-          return; 
+        if (
+          el === hoveredLink ||
+          hoveredLink.contains(el) ||
+          el.contains(hoveredLink)
+        ) {
+          return;
         }
         gsap.to(el, { opacity: 0.7, duration: 0.3 });
       });
     },
     function () {
-      gsap.to('h1, h2, h3, h4, h5, h6, p, span, li, a', {
+      gsap.to("h1, h2, h3, h4, h5, h6, p, span, li, a", {
         opacity: 1,
-        duration: 0.3
+        duration: 0.3,
       });
     }
   );
-  
 }
+
+export function setPatchAppearOnScroll() {
+  $(".patch").each(function () {
+    const patchTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: $(this),
+        start: "top 40%",
+        end: "bottom top",
+      },
+    });
+   
+    const patchSplitType = window.SplitType;
+    let patchTypeSplit = new patchSplitType($(this).find("p"), {
+      types: "words, chars",
+      tagName: "span",
+    });
+
+    patchTl.from($(this), {
+      scaleY: 0,
+      transformOrigin: "bottom",
+      duration: 0.5,
+      ease: "power2.out",
+    });
+    patchTl.from($(this).find(".horizontal-line"), {
+      scaleX: 0, 
+      duration: 0.3,
+      transformOrigin: "left",
+      ease: "power2.out",
+      stagger: 0.1,
+    });
+    patchTl.from(
+      $(this).find(".vertical-line"),
+      {
+        scaleY: 0, 
+        duration: 0.3,
+        transformOrigin: "top",
+        ease: "power2.out",
+        stagger: 0.1,
+      },
+      "<"
+    );
+    patchTl.from(
+      $(this).find(".char"),
+      {
+        yPercent: 120,
+      stagger: 0.002,
+      duration: 0.35,
+      },
+    );
+    patchTl.from(
+      $(this).find("img"),
+      {
+        yPercent: -120,
+      stagger: 0.002,
+      duration: 0.35,
+      }, "<"
+    );
+  });
+}
+
+export function setPatchAppear() {
+  $(".patch").each(function () {
+    const patchTl = gsap.timeline({    });
+   
+    const patchSplitType = window.SplitType;
+    let patchTypeSplit = new patchSplitType($(this).find("p"), {
+      types: "words, chars",
+      tagName: "span",
+    });
+
+    patchTl.from($(this), {
+      scaleY: 0,
+      transformOrigin: "bottom",
+      duration: 0.5,
+      ease: "power2.out",
+    });
+    patchTl.from($(this).find(".horizontal-line"), {
+      scaleX: 0, 
+      duration: 0.3,
+      transformOrigin: "left",
+      ease: "power2.out",
+      stagger: 0.1,
+    });
+    patchTl.from(
+      $(this).find(".vertical-line"),
+      {
+        scaleY: 0, 
+        duration: 0.3,
+        transformOrigin: "top",
+        ease: "power2.out",
+        stagger: 0.1,
+      },
+      "<"
+    );
+    patchTl.from(
+      $(this).find(".char"),
+      {
+        yPercent: 120,
+      stagger: 0.002,
+      duration: 0.35,
+      },
+    );
+    patchTl.from(
+      $(this).find("img"),
+      {
+        yPercent: -120,
+      stagger: 0.002,
+      duration: 0.35,
+      }, "<"
+    );
+  });
+}
+
+export function setButtonAppearOnScroll() {
+  $(".button").each(function(){
+
+    const buttonTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: $(this),
+        start: "top 70%",
+        end: "bottom top",
+      }
+    });
+
+    const buttonSplitType = window.SplitType;
+    let buttonTypeSplit = new buttonSplitType($(this).find("p"), {
+      types: "words, chars",
+      tagName: "span",
+    });
+
+    buttonTl.from($(this), {
+      scaleY: 0,
+      transformOrigin: "bottom",
+      duration: 0.5,
+      ease: "power2.out",
+    });
+    buttonTl.from($(this).find(".horizontal-line"), {
+      scaleX: 0, 
+      duration: 0.5,
+      transformOrigin: "left",
+      ease: "power2.out",
+      stagger: 0.1,
+    });
+    buttonTl.from($(this).find(".char"), {
+      yPercent: 120,
+      stagger: 0.002,
+      duration: 0.4,
+    }, "<");
+    buttonTl.from($(this).find(".barcode_contain"), {
+      scaleY: 0, 
+      duration: 0.5,
+      transformOrigin: "bottom",
+      ease: "power2.out",
+      stagger: 0.1,
+    }, "<");
+
+  });
+};
+
+export function setButtonAppear() {
+  $(".button").each(function(){
+
+    const buttonTl = gsap.timeline({    });
+
+    const buttonSplitType = window.SplitType;
+    let buttonTypeSplit = new buttonSplitType($(this).find("p"), {
+      types: "words, chars",
+      tagName: "span",
+    });
+
+    buttonTl.from($(this), {
+      scaleY: 0,
+      transformOrigin: "bottom",
+      duration: 0.5,
+      ease: "power2.out",
+    });
+    buttonTl.from($(this).find(".horizontal-line"), {
+      scaleX: 0, 
+      duration: 0.5,
+      transformOrigin: "left",
+      ease: "power2.out",
+      stagger: 0.1,
+    });
+    buttonTl.from($(this).find(".char"), {
+      yPercent: 120,
+      stagger: 0.002,
+      duration: 0.4,
+    }, "<");
+    buttonTl.from($(this).find(".barcode_contain"), {
+      scaleY: 0, 
+      duration: 0.5,
+      transformOrigin: "bottom",
+      ease: "power2.out",
+      stagger: 0.1,
+    }, "<");
+
+  });
+};

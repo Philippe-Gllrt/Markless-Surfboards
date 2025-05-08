@@ -15,6 +15,8 @@ import {
   setFooterScrollTop,
   setLenis,
   setLinkHover,
+  setPatchAppearOnScroll,
+  setButtonAppearOnScroll,
   //cookieConsentHandler,
 } from "./utils.js";
 
@@ -53,6 +55,8 @@ window.addEventListener("load", () => {
     setTimeout(setProcessHover, 500);
     setTimeout(setFooterAppear, 500);
     setLinkHover();
+    setButtonAppearOnScroll();
+    setPatchAppearOnScroll();
   }
   setFooterScrollTop();
   setNavBarMenu();
@@ -153,6 +157,7 @@ function createReflectLines() {
 //Animation used to enter the site, by scale the sun so it wrap the all page
 let landingEntranceTl = gsap.timeline();
 function EntranceAnimation() {
+  
   landingEntranceTl.to(
     ".preloader_reflect_svg",
     {
@@ -197,26 +202,57 @@ function EntranceAnimation() {
     ease: "power1.in",
   });
 
-  landingEntranceTl.from(
-    ".home-hero_section .patch",
-    {
-      y: "30vh",
-      duration: 0.8,
-      ease: "power2.out",
-    },
-    "<"
-  );
+  $(".home-hero_patch, .home-hero_patch-2").each(function () {
+    const patchTl = gsap.timeline({    });
+   
+    const patchSplitType = window.SplitType;
+    let patchTypeSplit = new patchSplitType($(this).find("p"), {
+      types: "words, chars",
+      tagName: "span",
+    });
 
-  landingEntranceTl.from(
-    ".home-hero_section .patch2",
-    {
-      y: "30vh",
-      duration: 0.8,
-      delay: 0.2,
+    patchTl.from($(this), {
+      scaleY: 0,
+      transformOrigin: "bottom",
+      duration: 0.5,
       ease: "power2.out",
-    },
-    "<"
-  );
+    });
+    patchTl.from($(this).find(".horizontal-line"), {
+      scaleX: 0, 
+      duration: 0.3,
+      transformOrigin: "left",
+      ease: "power2.out",
+      stagger: 0.1,
+    });
+    patchTl.from(
+      $(this).find(".vertical-line"),
+      {
+        scaleY: 0, 
+        duration: 0.3,
+        transformOrigin: "top",
+        ease: "power2.out",
+        stagger: 0.1,
+      },
+      "<"
+    );
+    patchTl.from(
+      $(this).find(".char"),
+      {
+        yPercent: 120,
+      stagger: 0.002,
+      duration: 0.35,
+      },
+    );
+    patchTl.from(
+      $(this).find("img"),
+      {
+        yPercent: -120,
+      stagger: 0.002,
+      duration: 0.35,
+      }, "<"
+    );
+    landingEntranceTl.add(patchTl, "<")
+  });
 
   landingEntranceTl.from(
     "[entrance-typing-effect] .char",

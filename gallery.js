@@ -12,6 +12,7 @@ import {
   setPageTransition,
   setLenis,
   setLinkHover,
+  setButtonAppear,
 } from "./utils.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -28,6 +29,7 @@ window.addEventListener("load", () => {
     setLinkHover();
     setImageHover();
     sectBarCodeMovement();
+    setButtonAppear();
   }
   setLenis();
   setInterval(updateClock, 1000);

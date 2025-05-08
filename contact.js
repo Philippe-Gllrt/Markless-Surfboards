@@ -13,6 +13,7 @@ import {
   enableScroll,
   setParallax,
   setButtonHover,
+  setButtonAppear,
 } from "./utils.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -31,6 +32,7 @@ window.addEventListener("load", () => {
     setContactButtonHover();
     sectBarCodeMovement();
     setContactHover();
+    setButtonAppear();
     setLinkHover()
   }
   

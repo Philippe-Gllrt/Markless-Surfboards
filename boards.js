@@ -15,6 +15,7 @@ import {
   setFooterScrollTop,
   setLenis,
   setLinkHover,
+  setButtonAppearOnScroll,
 } from "./utils.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -27,6 +28,7 @@ window.addEventListener("load", () => {
   if ($(window).width() > 991) {
     sectBarCodeMovement();
     setLinkHover();
+    setButtonAppearOnScroll();
     setButtonHover();
     setFooterAppear();
     setParallax();
