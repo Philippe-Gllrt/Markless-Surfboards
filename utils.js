@@ -681,6 +681,9 @@ export function setPatchAppear() {
     });
 
     patchTl.from($(this), {
+      duration: 1
+    });
+    patchTl.from($(this), {
       scaleY: 0,
       transformOrigin: "bottom",
       duration: 0.5,
@@ -783,6 +786,7 @@ export function setButtonAppear() {
       tagName: "span",
     });
 
+     buttonTl.from($(this), {duration: 1})
     buttonTl.from($(this), {
       scaleY: 0,
       transformOrigin: "bottom",

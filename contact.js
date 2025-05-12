@@ -14,6 +14,7 @@ import {
   setParallax,
   setButtonHover,
   setButtonAppear,
+  setPatchAppear
 } from "./utils.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -33,7 +34,9 @@ window.addEventListener("load", () => {
     sectBarCodeMovement();
     setContactHover();
     setButtonAppear();
-    setLinkHover()
+    setLinkHover();
+    lineAppear();
+    setPatchAppear()
   }
   
   setLenis();
@@ -152,5 +155,77 @@ function setContactButtonHover() {
         duration: 0.3,
       });
     });
-  })
+  });
+};
+
+function lineAppear() {
+  const tl = gsap.timeline();
+  tl.to($(".horizontal-line"), {duration: 1})
+  tl.from($(".contact-contact_column-right .horizontal-line").not(".contact-contact_content-wrapper .horizontal-line")
+, {
+    scaleX: 0,
+    duration: .5,
+    stagger: 0.05
+  });
+  tl.from($(".contact-contact_column-right .char").not(".contact-contact_content-wrapper .char"), {
+    yPercent: 120,
+    duration: .5,
+    stagger: 0.005
+  }, "<");
+
+$(".home-hero_patch, .home-hero_patch-2").each(function () {
+    const patchTl = gsap.timeline({    });
+   
+    const patchSplitType = window.SplitType;
+    let patchTypeSplit = new patchSplitType($(this).find("p"), {
+      types: "words, chars",
+      tagName: "span",
+    });
+
+     patchTl.from($(this), {
+      
+      duration: 1,
+      
+    });
+    patchTl.from($(this), {
+      scaleY: 0,
+      transformOrigin: "bottom",
+      duration: 0.5,
+      ease: "power2.out",
+    });
+    patchTl.from($(this).find(".horizontal-line"), {
+      scaleX: 0, 
+      duration: 0.3,
+      transformOrigin: "left",
+      ease: "power2.out",
+      stagger: 0.1,
+    });
+    patchTl.from(
+      $(this).find(".vertical-line"),
+      {
+        scaleY: 0, 
+        duration: 0.3,
+        transformOrigin: "top",
+        ease: "power2.out",
+        stagger: 0.1,
+      },
+      "<"
+    );
+    patchTl.from(
+      $(this).find(".char"),
+      {
+        yPercent: 120,
+      stagger: 0.002,
+      duration: 0.35,
+      },
+    );
+    patchTl.from(
+      $(this).find("img"),
+      {
+        yPercent: -120,
+      stagger: 0.002,
+      duration: 0.35,
+      }, "<"
+    );
+  });
 }
