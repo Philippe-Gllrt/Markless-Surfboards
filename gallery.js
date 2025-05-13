@@ -90,7 +90,7 @@ function setGallery() {
   //until the containers are full: create a div with format. Inject inmage with 120% of width. Inject div in container
   for (let i = 0; i < itemCount; i++) {
     wrappers.each(function () {
-      const divHeight = Math.floor(Math.random() * (100 - 50 + 1)) + 50;
+      // const divHeight = Math.floor(Math.random() * (100 - 50 + 1)) + 50;
       const randomFormatIndex = Math.floor(
         Math.random() * formatsReplicate.length
       );
@@ -101,7 +101,7 @@ function setGallery() {
       const imageLink = imagesLinksReplicate.splice(randomImageIndex, 1)[0];
 
       let $div = $("<div></div>").css({
-        height: divHeight + "%",
+        height: "80%",
         "aspect-ratio": divFormat,
         overflow: "hidden",
         "clip-path": "inset(0 0 0 0)",
@@ -202,25 +202,61 @@ function setGalleryHover() {
 }
 
 function setImageHover() {
-  $(".gallery-gallery_item").each(function () {
+  $(".gallery-gallery_item-wrapper").each(function () {
     $(this).hover(
-      () => {
-        gsap.to($(this), {
-          scale: 1.2,
-          duration: 0.7,
-          ease: "power1.out",
+      function () {
+        const levels = [
+          { element: $(this), scale: 1.2 },
+          { element: $(this).prev(), scale: 1.1 },
+          { element: $(this).next(), scale: 1.1 },
+          { element: $(this).prev().prev(), scale: 1.05 },
+          { element: $(this).next().next(), scale: 1.05 },
+        ];
+
+        levels.forEach(({ element, scale }) => {
+          if (element.length) {
+            gsap.to(element, {
+              scaleY: scale,
+              duration: 0.4,
+              ease: "power1.out",
+            });
+            gsap.to(element.find("img"), {
+              scaleX: scale,
+              duration: 0.4,
+              ease: "power1.out",
+            });
+          }
         });
       },
-      () => {
-        gsap.to($(this), {
-          scale: 1,
-          duration: 0.7,
-          ease: "power1.out",
+      function () {
+        const levels = [
+          $(this),
+          $(this).prev(),
+          $(this).next(),
+          $(this).prev().prev(),
+          $(this).next().next(),
+        ];
+
+        levels.forEach((element) => {
+          if (element.length) {
+            gsap.to(element, {
+              scaleY: 1,
+              duration: 0.4,
+              ease: "power1.out",
+            });
+            gsap.to(element.find("img"), {
+              scaleX: 1,
+              duration: 0.4,
+              ease: "power1.out",
+            });
+          }
         });
       }
     );
   });
 }
+
+
 
 function checkImagesArray() {
   if (imagesLinksReplicate.length == 0) {
