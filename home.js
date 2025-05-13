@@ -688,18 +688,22 @@ function setProcessFade() {
        start: "top 20%",
        end: "bottom 20%",
        onEnter: ()=>{
+        $('.home-process_background').css("display", "block");
         $(".home-about_section, .home-philosophy_section, .home-process_section").removeClass("brown-background");
         $(".home-about_section, .home-philosophy_section, .home-process_section").addClass("pink-background");
        },
        onEnterBack: ()=>{
+        $('.home-process_background').css("display", "block")
         $(".home-about_section, .home-philosophy_section, .home-process_section").removeClass("brown-background");
         $(".home-about_section, .home-philosophy_section, .home-process_section").addClass("pink-background");
        },
        onLeave: ()=>{
+        $('.home-process_background').css("display", "none")
         $(".home-about_section, .home-philosophy_section, .home-process_section").removeClass("pink-background");
         $(".home-about_section, .home-philosophy_section, .home-process_section").addClass("brown-background");
        },
        onLeaveBack: ()=>{
+        $('.home-process_background').css("display", "none")
         $(".home-about_section, .home-philosophy_section, .home-process_section").removeClass("pink-background");
         $(".home-about_section, .home-philosophy_section, .home-process_section").addClass("brown-background");
        },
