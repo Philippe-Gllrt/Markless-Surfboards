@@ -460,6 +460,18 @@ function setBoardsScrollAnimation() {
       ease: "power1.out",
       duration: 1,
     });
+     boardTl.from($(boardCardsShifted[index]).find(".horizontal-line"), {
+      scaleX: 0,
+      delay: .5,
+      ease: "power1.out",
+      duration: .7,
+    }, "<");
+    boardTl.from($(boardCardsShifted[index]).find(".vertical-line"), {
+      scaleY: 0,
+      delay: .5,
+      ease: "power1.out",
+      duration: .7,
+    }, "<");
 
     if (boardCardsPoped[index]) {
       boardTl.to(
