@@ -83,7 +83,7 @@ export function setNavBarMenu() {
       "<"
     );
 
-    delay = Math.random() * (0.1 - 0.01) + 0.01;
+    delay = Math.random() * (0.06 - 0.01) + 0.01;
   });
 
   $(".nav_menu .vertical-line").each(function (index, element) {
@@ -162,7 +162,7 @@ export function setNavBarMenu() {
       ease: "power2.inOut",
       duration: 0.5,
       yPercent: -120,
-      delay: 0.2,
+      delay: 0.15,
     },
     "<"
   );
@@ -329,7 +329,7 @@ export function setFooterAppear() {
     {
       clipPath: "inset(100% 0 0 0)",
       duration: 0.35,
-      delay: 1.2,
+      delay: 0.3,
     },
     "<"
   );
@@ -340,7 +340,6 @@ export function setFooterAppear() {
       yPercent: 120,
       stagger: 0.002,
       duration: 0.35,
-      delay: 0.3,
     },
     "<"
   );
