@@ -40,7 +40,6 @@ window.addEventListener("load", () => {
   setInterval(updateClock, 1000);
   updateClock();
   setLenis();
-  setProcessFade();
   if (sessionStorage.getItem("visited") !== "true") {
     EntranceAnimation();
   }
@@ -56,6 +55,7 @@ window.addEventListener("load", () => {
     setLinkHover();
     setButtonAppearOnScroll();
     setPatchAppearOnScroll();
+    setProcessFade();
   }
   setFooterScrollTop();
   setNavBarMenu();

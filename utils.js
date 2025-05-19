@@ -241,7 +241,6 @@ export function setParallax() {
 }
 
 export function setButtonHover() {
-  setCursorButton();
   $(".button").each(function () {
     const $btn = $(this).find(".button_second-row");
     const $text = $btn.find(".heading-style-h2");
@@ -300,77 +299,6 @@ export function setButtonHover() {
     });
   });
 }
-
-export function setCursorButton() {
-  $(".button").each(function () {
-    const $btn = $(this).find(".button_second-row");
-
-    // Crée le curseur custom pour ce bouton
-    const $cursor = $("<img>", {
-      class: "custom-cursor",
-      src: "https://cdn.prod.website-files.com/67939e9483ef1b9e88e964c0/681b82d41b534ede8068d9f7_board_icon_transparent.png",
-    }).css({
-      width: "40px",
-      height: "40px",
-      position: "absolute",
-      top: 0,
-      left: 0,
-      opacity: 0,
-      pointerEvents: "none",
-      zIndex: 10,
-      display: "none",
-    });
-
-    // On l'ajoute DANS le bouton directement
-    $btn.css("position", "relative"); // Assure-toi que le parent a position relative
-    $btn.append($cursor);
-
-    $btn.on("mouseenter", function (e) {
-      $("body").css("cursor", "none");
-      $btn.css("cursor", "none");
-      gsap.to($cursor, {
-        opacity: 1,
-        duration: .2
-      });
-
-      // Position initiale du curseur custom
-      const offset = $btn.offset();
-      const x = e.pageX - offset.left;
-      const y = e.pageY - offset.top;
-
-      gsap.set($cursor, {
-        x: x + 2,
-        y: y + 2,
-      });
-
-      $cursor.show();
-    });
-
-    $btn.on("mousemove", function (e) {
-      const offset = $btn.offset();
-      const x = e.pageX - offset.left;
-      const y = e.pageY - offset.top;
-
-      gsap.to($cursor, {
-        x: x + 2,
-        y: y + 2,
-        duration: 0.2,
-        ease: "power2.out",
-      });
-    });
-
-    $btn.on("mouseleave", function () {
-      $("body").css("cursor", "default");
-      $btn.css("cursor", "default");
-      gsap.to($cursor, {
-        opacity: 0,
-        duration: .2,
-        onComplete: () => {$cursor.hide();}
-      });
-    });
-  });
-}
-
 
 
 export function setFooterAppear() {
