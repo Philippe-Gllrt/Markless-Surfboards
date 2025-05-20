@@ -789,3 +789,14 @@ export function LottieScrollTrigger(vars) {
 
   return animation;
 }
+
+export function setCardsNumber() {
+  const $cardNumbers = $('.boards-model_card-number');
+  const cardsAmount = $cardNumbers.length;
+
+  $cardNumbers.each(function(index) {
+    const current = String(index + 1).padStart(2, '0');
+    const total = String(cardsAmount).padStart(2, '0');
+    $(this).text(`${current}/${total}`);
+  });
+}

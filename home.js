@@ -18,6 +18,7 @@ import {
   setPatchAppearOnScroll,
   setButtonAppearOnScroll,
   LottieScrollTrigger,
+  setCardsNumber,
 } from "./utils.js";
 
 
@@ -56,7 +57,8 @@ window.addEventListener("load", () => {
     setButtonAppearOnScroll();
     setPatchAppearOnScroll();
     setProcessFade();
-  }
+  };
+  setCardsNumber();
   setFooterScrollTop();
   setNavBarMenu();
   setIntroLottie();

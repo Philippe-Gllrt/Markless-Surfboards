@@ -16,6 +16,7 @@ import {
   setLenis,
   setLinkHover,
   setButtonAppearOnScroll,
+  setCardsNumber,
 } from "./utils.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -34,14 +35,18 @@ window.addEventListener("load", () => {
     setParallax();
     setImageOnScroll();
     setTextOnScroll();
+    const $items = $(".boards-model_info-item");
+    const middleIndex = Math.floor($items.length / 2);
+    refreshInfo(middleIndex);
+    activeCardMarkee();
   }
+  setCardsNumber();
   setLenis();
   setInterval(updateClock, 1000);
   setFooterScrollTop();
   updateClock();
   setNavBarMenu();
   setCardsBehavior();
-  activeCardMarkee();
 });
 
 const SplitType = window.SplitType;
@@ -51,171 +56,89 @@ let typeSplit = new SplitType("[text-split]", {
 });
 
 function setCardsBehavior() {
+  const maxOffset = 10;
+
   gsap.set(".boards-model_card", { scale: 0.8 });
   gsap.set(".boards-model_card-title", { opacity: 0 });
   gsap.set($(".boards-model_info-wrapper").find(".char"), {
     yPercent: 120,
   });
 
-  gsap.registerPlugin(Draggable);
+  $(".boards-model_card-wrapper").on("click", activeCardMarkee);
 
-  const $container = $(".boards-model_cards-container");
-  const $track = $(".boards-model_cards-track");
-  let $cardsList = $(".boards-model_cards");
+  $(".boards-model_cards-container").on("mousemove", function (e) {
+    let mouseX = e.clientX / $(window).width(); // 0 (gauche) à 1 (droite)
+    let offset = -maxOffset + mouseX * maxOffset * 2; // Déplacement de -20% à +20%
 
-  if (
-    $container.length === 0 ||
-    $track.length === 0 ||
-    $cardsList.length === 0
-  ) {
-    console.error("one of the elements cannot be found!");
-    return;
-  }
-
-  const cardWidth = $cardsList.first().outerWidth(true);
-  const totalWidth = cardWidth * $cardsList.length;
-  // $track.width(totalWidth * 2);
-
-  // Clone three to ensure covering all screen
-  $track.append($cardsList.clone());
-  $track.append($cardsList.clone());
-  $track.append($cardsList.clone());
-  $cardsList = $(".boards-model_cards"); // Re-select, including clones this time
-
-  const draggable = Draggable.create($track[0], {
-    type: "x",
-    // bounds: { minX: -totalWidth, maxX: 0 },
-    inertia: true,
-    onDrag: () => {
-      checkLoop();
-      scaleActiveCard();
-    },
-    onDragEnd: () => {
-      checkLoop();
-      scaleActiveCard();
-      activeCardMarkee();
-    },
-    onThrowUpdate: () => {
-      checkLoop();
-    },
-  })[0];
-
-  function checkLoop() {
-    const currentX = gsap.getProperty($track[0], "x");
-
-    if (currentX <= -totalWidth) {
-      gsap.set($track, { x: currentX + totalWidth });
-      setTimeout(() => draggable.update(), 0);
-    } else if (currentX >= 0) {
-      gsap.set($track, { x: currentX - totalWidth });
-      setTimeout(() => draggable.update(), 0);
-    }
-  }
-
-  function scaleActiveCard() {
-    const windowCenter = window.outerWidth / 2;
-    const $cards = $(".boards-model_card");
-
-    let closestCard = null;
-    let closestDistance = Infinity;
-
-    //define the closest card
-    $cards.each(function () {
-      const $card = $(this);
-      const cardOffset = $card.offset().left;
-      const cardCenter = cardOffset + $card.outerWidth() / 2;
-
-      const distance = Math.abs(windowCenter - cardCenter);
-      if (distance < closestDistance) {
-        closestDistance = distance;
-        closestCard = $card;
-      }
+    gsap.to($(".boards-model_cards-track"), {
+      xPercent: -offset,
+      duration: 0.3,
+      ease: "power1.out",
     });
+  });
 
-    //for all cards : if closest, upscale, if not, downscale
-    $cards.each(function () {
-      const track = $(this).find(".boards_model_title-track");
-      const text = $(this).find(".boards-model_card-title");
-      if ($(this).attr("card-model") === closestCard.attr("card-model")) {
-        gsap.to(this, { scale: 1, duration: 0.3 });
-      } else {
-        gsap.to(this, {
-          scale: 0.8,
-          duration: 0.3,
-        });
-      }
+  $(".boards-model_cards-container").on("mouseleave", function (e) {
+    gsap.to($(".boards-model_cards-track"), {
+      xPercent: 0,
+      duration: 0.7,
+      ease: "power1.out",
     });
-  }
-  scaleActiveCard();
+  });
 }
 
 function activeCardMarkee() {
-  const windowCenter = window.outerWidth / 2;
-  const $cards = $(".boards-model_card");
-  let infoRefreshed = false;
-  let closestCard = null;
-  let closestDistance = Infinity;
+  let element;
+  if (!this) {
+    const $items = $(".boards-model_card-wrapper");
+    const middleIndex = Math.floor($items.length / 2);
+    element = $(".boards-model_card-wrapper")[middleIndex];
+  } else {
+    element = this;
+  }
+  const text = $(element).find(".boards-model_card-title");
+  const container = $(element).find(".boards_model_title-container");
+  const index = $(element).index(".boards-model_card-wrapper");
 
-  //loop selecting the closest card
-  $cards.each(function () {
-    const $card = $(this);
-    const cardOffset = $card.offset().left;
-    const cardCenter = cardOffset + $card.outerWidth() / 2;
+  //disable previous actived card
+  const $activeCard = $('[markee-activated="true"]');
+  const activeText = $activeCard.find(".boards-model_card-title");
+  console.log($activeCard);
+  const activeContainer = $activeCard.find(".boards_model_title-container");
+  console.log(activeContainer);
+  if ($activeCard.length && !$activeCard.is(element)) {
+    gsap.to($activeCard.find(".boards-model_card"), {
+      scale: 0.8,
+      duration: 0.3,
+    });
+    gsap.to(activeText, {
+      opacity: 0,
+      duration: 0.3,
+      onComplete: () => {
+        gsap.set(activeContainer, { display: "none" });
+        gsap.killTweensOf(activeText);
+        gsap.set(activeText, { xPercent: 0 });
+      },
+    });
+    $activeCard.removeAttr("markee-activated");
+  }
 
-    const distance = Math.abs(windowCenter - cardCenter);
-    if (distance < closestDistance) {
-      closestDistance = distance;
-      closestCard = $card;
-    }
-  });
-
-  //For all cards : if closest, display flex the marquee and launch the loop. if not, fade out and display none
-  $cards.each(function (index) {
-    const track = $(this).find(".boards_model_title-track");
-    const text = $(this).find(".boards-model_card-title");
-    const container = $(this).find(".boards_model_title-container");
-    if (
-      $(this).attr("card-model") === closestCard.attr("card-model") &&
-      !($(this).attr("markee-activated") === "true")
-    ) {
-      gsap.set(container, { display: "flex" });
-      gsap.to(text, {
-        opacity: 1,
-        duration: 0.3,
-      });
-      gsap.to(text, {
-        xPercent: -200,
-        repeat: -1,
-        ease: "linear",
-        duration: 3,
-      });
-      $(this).attr("markee-activated", "true");
-
-      if (!infoRefreshed) {
-        refreshInfo(
-          index %
-            $($(".boards-models_info-list")[0]).find(".boards-model_info-item")
-              .length
-        );
-
-        infoRefreshed = true;
-      }
-    } else if (
-      $(this).attr("card-model") !== closestCard.attr("card-model") &&
-      $(this).attr("markee-activated") === "true"
-    ) {
-      gsap.to(text, {
-        opacity: 0,
-        duration: 0.3,
-        onComplete: () => {
-          gsap.set(container, { display: "none" });
-          gsap.killTweensOf(text);
-          gsap.set(text, { xPercent: 0 });
-        },
-      });
-      $(this).removeAttr("markee-activated");
-    }
-  });
+  //Activate card
+  if (!$activeCard.is(element)) {
+    gsap.set(container, { display: "flex" });
+    gsap.to($(element).find(".boards-model_card"), { scale: 1, duration: 0.3 });
+    gsap.to(text, {
+      opacity: 1,
+      duration: 0.3,
+    });
+    gsap.to(text, {
+      xPercent: -200,
+      repeat: -1,
+      ease: "linear",
+      duration: 3,
+    });
+    $(element).attr("markee-activated", "true");
+    refreshInfo(index);
+  }
 }
 
 let targetWrapper;
@@ -228,20 +151,23 @@ function refreshInfo(index) {
   infoMainTl = gsap.timeline();
 
   //hide the previous active card's related infos
-
-  infoMainTl.to(
-    $(targetWrapper).find(".char"),
-    {
-      yPercent: 120,
-      stagger: { amount: 0.5 },
-      duration: 0.3,
-      onComplete: () => {
-        //ensure all infos are hidden
-        gsap.set($(".boards-model_info-item").find(".char"), { yPercent: 120 });
+  if (targetWrapper) {
+    infoMainTl.to(
+      $(targetWrapper).find(".char"),
+      {
+        yPercent: 120,
+        stagger: { amount: 0.2 },
+        duration: 0.15,
+        onComplete: () => {
+          //ensure all infos are hidden
+          gsap.set($(".boards-model_info-item").find(".char"), {
+            yPercent: 120,
+          });
+        },
       },
-    },
-    "<"
-  );
+      "<"
+    );
+  }
 
   //select new active acreds infos
   targetWrapper = $(".boards-model_info-item")[index];
@@ -258,8 +184,8 @@ function refreshInfo(index) {
       $(this).find(".horizontal-line"),
       {
         scaleX: 0,
-        stagger: { amount: 0.5 },
-        duration: 0.3,
+        stagger: { amount: 0.2 },
+        duration: 0.15,
       },
       "<"
     );
@@ -270,7 +196,7 @@ function refreshInfo(index) {
         scaleX: 1,
         stagger: { amount: 0.5 },
         duration: 0.3,
-        delay: 0.8,
+        delay: 0.4,
       },
       "<"
     );
