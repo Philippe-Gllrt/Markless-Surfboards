@@ -101,10 +101,8 @@ function activeCardMarkee() {
 
   //disable previous actived card
   const $activeCard = $('[markee-activated="true"]');
-  const activeText = $activeCard.find(".boards-model_card-title");
-  console.log($activeCard);
+  const activeText = $activeCard.find(".boards-model_card-title")
   const activeContainer = $activeCard.find(".boards_model_title-container");
-  console.log(activeContainer);
   if ($activeCard.length && !$activeCard.is(element)) {
     gsap.to($activeCard.find(".boards-model_card"), {
       scale: 0.8,
