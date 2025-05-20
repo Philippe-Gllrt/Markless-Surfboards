@@ -39,6 +39,7 @@ window.addEventListener("load", () => {
     const middleIndex = Math.floor($items.length / 2);
     refreshInfo(middleIndex);
     activeCardMarkee();
+    setCardsBehavior();
   }
   setCardsNumber();
   setLenis();
@@ -46,7 +47,6 @@ window.addEventListener("load", () => {
   setFooterScrollTop();
   updateClock();
   setNavBarMenu();
-  setCardsBehavior();
 });
 
 const SplitType = window.SplitType;
