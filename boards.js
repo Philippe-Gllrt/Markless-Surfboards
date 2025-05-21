@@ -16,7 +16,6 @@ import {
   setLenis,
   setLinkHover,
   setButtonAppearOnScroll,
-  setCardsNumber,
 } from "./utils.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -41,7 +40,6 @@ window.addEventListener("load", () => {
     activeCardMarkee();
     setCardsBehavior();
   }
-  setCardsNumber();
   setLenis();
   setInterval(updateClock, 1000);
   setFooterScrollTop();
